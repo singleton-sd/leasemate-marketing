@@ -1,0 +1,24 @@
+---
+import { getEntry } from "astro:content";
+import PageHero from "../components/PageHero.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { requirePageData } from "../lib/require-page-data";
+
+const pricing = requirePageData(await getEntry("pages", "pricing"), "pricing");
+---
+
+<BaseLayout title={pricing.title} description={pricing.description}>
+  <main id="main-content">
+    <PageHero
+      eyebrow={pricing.eyebrow}
+      title={pricing.headline}
+      lead={pricing.summary}
+    />
+    <section class="shell band" aria-label="Pricing placeholder">
+      <p class="placeholder-banner" role="note">
+        Placeholder — pricing is not final.
+      </p>
+      {pricing.note && <p class="page-copy">{pricing.note}</p>}
+    </section>
+  </main>
+</BaseLayout>

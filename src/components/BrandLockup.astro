@@ -1,0 +1,28 @@
+---
+import { withBase } from "../lib/nav";
+
+interface Props {
+  href?: string;
+  variant?: "header" | "footer";
+}
+
+const { href = import.meta.env.BASE_URL, variant = "header" } = Astro.props;
+const src = withBase(
+  "/brand/leasemate-lockup-on-dark-transparent.svg",
+  import.meta.env.BASE_URL,
+);
+---
+
+<a
+  class:list={["brand-lockup", variant === "footer" && "brand-lockup--footer"]}
+  href={href}
+  aria-label="LeaseMate home"
+>
+  <img
+    class="brand-lockup__mark"
+    src={src}
+    alt=""
+    width={variant === "footer" ? 210 : 168}
+    height={variant === "footer" ? 60 : 48}
+  />
+</a>

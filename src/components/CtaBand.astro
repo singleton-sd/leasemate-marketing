@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string;
+  titleId?: string;
+}
+
+const {
+  title,
+  eyebrow,
+  titleId = `cta-title-${crypto.randomUUID().slice(0, 8)}`,
+} = Astro.props;
+---
+
+<section class="cta-band cta-band--dark" aria-labelledby={titleId}>
+  <div class="shell">
+    {eyebrow && <p class="eyebrow cta-band__eyebrow">{eyebrow}</p>}
+    <h2 id={titleId}>{title}</h2>
+    <div class="cta-band__actions">
+      <slot />
+    </div>
+  </div>
+</section>

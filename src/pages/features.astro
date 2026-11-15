@@ -1,0 +1,32 @@
+---
+import { getEntry } from "astro:content";
+import FeatureGrid from "../components/FeatureGrid.astro";
+import FeatureItem from "../components/FeatureItem.astro";
+import PageHero from "../components/PageHero.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { requirePageData } from "../lib/require-page-data";
+
+const features = requirePageData(
+  await getEntry("pages", "features"),
+  "features",
+);
+---
+
+<BaseLayout title={features.title} description={features.description}>
+  <main id="main-content">
+    <PageHero
+      eyebrow={features.eyebrow}
+      title={features.headline}
+      lead={features.summary}
+    />
+    <section class="shell band" aria-label="Product features">
+      <FeatureGrid>
+        {
+          features.features.map((item) => (
+            <FeatureItem title={item.title} description={item.description} />
+          ))
+        }
+      </FeatureGrid>
+    </section>
+  </main>
+</BaseLayout>

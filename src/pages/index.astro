@@ -1,0 +1,41 @@
+---
+import { getEntry } from "astro:content";
+import ButtonLink from "../components/ButtonLink.astro";
+import CtaBand from "../components/CtaBand.astro";
+import PageHero from "../components/PageHero.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/nav";
+import { requirePageData } from "../lib/require-page-data";
+
+const home = requirePageData(await getEntry("pages", "home"), "home");
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={home.title} description={home.description}>
+  <main id="main-content">
+    <PageHero
+      eyebrow="Lease management · Singleton SD"
+      title={home.headline}
+      lead={home.summary}
+    >
+      <ButtonLink
+        slot="actions"
+        href={withBase("/contact", base)}
+        label="Join the waitlist"
+      />
+      <ButtonLink
+        slot="actions"
+        href={withBase("/features", base)}
+        label="See features"
+        variant="secondary"
+      />
+    </PageHero>
+
+    <CtaBand
+      eyebrow="Early access"
+      title="Register interest while LeaseMate is being built."
+    >
+      <ButtonLink href={withBase("/contact", base)} label="Join waitlist" />
+    </CtaBand>
+  </main>
+</BaseLayout>
