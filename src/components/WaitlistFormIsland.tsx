@@ -115,7 +115,7 @@ export default function WaitlistFormIsland({
   const siteKey = turnstileSiteKey.trim();
   const deliveryConfigured = siteKey.length > 0;
   const configError = !deliveryConfigured
-    ? "Waitlist signup is not configured. Email hello@leasemate.singletonsd.com instead."
+    ? "Waitlist signup is not configured. Check back here soon."
     : "";
   const submitError = submitState.status === "error" ? submitState.message : "";
   const formAlert = submitError || configError || turnstileError;
@@ -135,8 +135,7 @@ export default function WaitlistFormIsland({
     if (!deliveryConfigured) {
       dispatch({
         type: "error",
-        message:
-          "Waitlist signup is not configured. Email hello@leasemate.singletonsd.com instead.",
+        message: "Waitlist signup is not configured. Check back here soon.",
       });
       return;
     }

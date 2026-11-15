@@ -21,11 +21,7 @@ export const footerNav = {
 } as const satisfies Record<string, readonly NavItem[]>;
 
 export function withBase(path: string, base: string): string {
-  if (
-    path.startsWith("http") ||
-    path.startsWith("#") ||
-    path.startsWith("mailto:")
-  ) {
+  if (path.startsWith("http") || path.startsWith("#")) {
     return path;
   }
   const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;

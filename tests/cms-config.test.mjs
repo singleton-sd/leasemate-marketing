@@ -41,4 +41,6 @@ test("Decap pages collection is generated per page file", async () => {
   assert.match(config, /name: template/);
   assert.match(config, /widget: hidden/);
   assert.doesNotMatch(config, /poc-inkads-marketing/);
+  assert.doesNotMatch(config, /hello@/);
+  assert.doesNotMatch(config, /mailto:/);
 });

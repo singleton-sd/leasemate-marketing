@@ -8,7 +8,6 @@ export const contactPageCms = {
     templateField("contact"),
     ...seoCmsFields,
     { label: "Eyebrow", name: "eyebrow", widget: "string", required: false },
-    { label: "Email", name: "email", widget: "string", required: false },
     { label: "Status", name: "status", widget: "string", required: false },
     {
       label: "Submit label",

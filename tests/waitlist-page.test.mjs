@@ -31,4 +31,8 @@ test("contact page is the waitlist surface with both flag states", async () => {
   assert.match(form, /PUBLIC_LEAD_INTAKE_ENABLED/);
   assert.doesNotMatch(island, /PostKit/);
   assert.doesNotMatch(form, /resolve-postkit-api-base-url/);
+  assert.doesNotMatch(page, /hello@|mailto:/);
+  assert.doesNotMatch(content, /hello@|mailto:/);
+  assert.doesNotMatch(island, /hello@|mailto:/);
+  assert.doesNotMatch(form, /hello@|mailto:/);
 });

@@ -9,7 +9,7 @@ import {
 import { loadTurnstile } from "../lib/turnstile";
 
 export const TURNSTILE_LOAD_ERROR =
-  "Verification failed to load. Check your connection and try again, or email hello@leasemate.singletonsd.com.";
+  "Verification failed to load. Check your connection and try again.";
 
 export type TurnstileWidgetHandle = {
   reset: () => void;

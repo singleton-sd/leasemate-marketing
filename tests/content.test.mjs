@@ -53,6 +53,8 @@ test("contact waitlist content exposes opening-soon copy", async () => {
     content,
     /The waitlist form is temporarily closed\. Check back here soon\./,
   );
+  assert.doesNotMatch(content, /hello@/);
+  assert.doesNotMatch(content, /mailto:/);
 });
 
 test("pricing page is clearly a placeholder", async () => {
@@ -84,12 +86,17 @@ test("retired audience and billing copy is gone from source pages", async () => 
     new URL("../src/components/SiteFooter.astro", import.meta.url),
     new URL("../src/pages/contact.astro", import.meta.url),
     new URL("../src/components/WaitlistForm.astro", import.meta.url),
+    new URL("../src/components/WaitlistFormIsland.tsx", import.meta.url),
+    new URL("../src/components/TurnstileWidget.tsx", import.meta.url),
     new URL("../README.md", import.meta.url),
   ];
   const banned = [
     /landlords and tenants/i,
     /Identity documents later/,
     /self-serve billing/i,
+    /hello@/,
+    /mailto:/,
+    /[A-Za-z0-9._%+-]+@leasemate\.singletonsd\.com/,
   ];
   for (const file of files) {
     const source = await readFile(file, "utf8");

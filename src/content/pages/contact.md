@@ -5,7 +5,6 @@ description: Register your interest in LeaseMate and hear when early access open
 eyebrow: Waitlist
 headline: Join the LeaseMate waitlist.
 summary: Leave your details if you want to hear when LeaseMate is ready for early access.
-email: hello@leasemate.singletonsd.com
 status: Early access · a Singleton SD product
 submitLabel: Join waitlist
 successTitle: You're on the list.

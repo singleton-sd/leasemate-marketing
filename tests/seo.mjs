@@ -128,6 +128,16 @@ testMetadata("default waitlist state is opening soon", () => {
   assert.doesNotMatch(contactHtml, /data-waitlist-form=/);
 });
 
+testMetadata("built pages have no contact email or mailto links", () => {
+  const mailbox = /[A-Za-z0-9._%+-]+@leasemate\.singletonsd\.com/;
+  assert.doesNotMatch(indexHtml, /mailto:/i);
+  assert.doesNotMatch(contactHtml, /mailto:/i);
+  assert.doesNotMatch(indexHtml, mailbox);
+  assert.doesNotMatch(contactHtml, mailbox);
+  assert.doesNotMatch(indexHtml, /hello@/i);
+  assert.doesNotMatch(contactHtml, /hello@/i);
+});
+
 testMetadata("sitemap lists primary public routes", () => {
   assert.match(
     sitemapXml,

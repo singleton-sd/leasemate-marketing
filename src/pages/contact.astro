@@ -12,7 +12,6 @@ const {
   eyebrow = "Waitlist",
   headline,
   summary,
-  email = "hello@leasemate.singletonsd.com",
   status = "Early access · a Singleton SD product",
   submitLabel = "Join waitlist",
   successTitle = "You're on the list.",
@@ -30,7 +29,6 @@ const {
         <h1 id="page-title">{headline}</h1>
         <p class="contact-page__lead">{summary}</p>
         <div class="contact-page__meta">
-          <MetaPair label="Email" value={email} href={`mailto:${email}`} />
           <MetaPair label="Status" value={status} />
         </div>
       </div>
