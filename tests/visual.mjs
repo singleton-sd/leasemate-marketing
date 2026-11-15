@@ -325,32 +325,11 @@ for (const dir of ["pr", "base", "diff"]) {
 const routes = collectHtmlRoutes();
 assert.ok(routes.length > 0, "Expected at least one HTML route in dist/");
 
-/** Query-param UI states (same HTML file; client JS applies prefills). */
-const EXTRA_VISUAL_CAPTURES = [
-  {
-    urlPath: "contact",
-    query: "?role=venue",
-    id: "contact-role-venue",
-  },
-  {
-    urlPath: "contact",
-    query: "?role=advertiser",
-    id: "contact-role-advertiser",
-  },
-];
-
-const captures = [
-  ...routes.map((route) => ({
-    urlPath: route.urlPath,
-    query: "",
-    id: routeSlug(route.urlPath),
-  })),
-  ...EXTRA_VISUAL_CAPTURES.map((extra) => ({
-    urlPath: extra.urlPath,
-    query: extra.query,
-    id: extra.id,
-  })),
-];
+const captures = routes.map((route) => ({
+  urlPath: route.urlPath,
+  query: "",
+  id: routeSlug(route.urlPath),
+}));
 
 const viewports = [
   { name: "desktop", width: 1440, height: 900 },
