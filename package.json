@@ -20,7 +20,7 @@
     "test:a11y": "node tests/a11y.mjs",
     "test:visual": "node tests/visual.mjs",
     "test:visual:gate": "node tests/visual-gate.mjs",
-    "verify": "pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm test:seo",
+    "verify": "pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm test:seo && pnpm test:a11y",
     "cms:config": "node --experimental-strip-types scripts/generate-cms-config.ts",
     "prepare": "husky"
   },

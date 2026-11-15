@@ -11,16 +11,17 @@ workflow:
 
 1. Posts a **sticky PR comment** with the live preview link
 2. Puts a managed **Preview** section at the **top** of the PR body
-3. Captures Playwright full-page screenshots (desktop 1440, mobile 390, and 375) for every built HTML route, plus hover/focus, open mobile nav, and
+3. Runs `pnpm test:a11y` against the `/` PR build (all seven routes)
+4. Captures Playwright full-page screenshots (desktop 1440, mobile 390, and 375) for every built HTML route, plus hover/focus, open mobile nav, and
    waitlist form states (flag on only in the screenshot harness). Compares
    each default route to a **build of the PR base SHA**, and hosts a report
    at `…/pr-<number>/visual/`
-4. Runs a required **`visual-review`** status check that **fails** when any
+5. Runs a required **`visual-review`** status check that **fails** when any
    route is `changed` or `new` vs that base build. New routes still capture
    the baseline `404` page as “before” when a baseline dist exists. The first
    PR against an empty `main` skips the local baseline (`VISUAL_SKIP_BASE=1`)
    because `main` has no `package.json`.
-5. Removes the preview deploy and hides the sticky comment when the PR closes
+6. Removes the preview deploy and hides the sticky comment when the PR closes
 
 Pull requests from forks are not given write access to publish.
 

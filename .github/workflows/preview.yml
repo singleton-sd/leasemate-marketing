@@ -79,6 +79,8 @@ jobs:
         run: pnpm build
       - name: Install Playwright browsers
         run: pnpm playwright:install
+      - name: Accessibility checks
+        run: pnpm test:a11y
       - name: Capture visual screenshots
         run: pnpm test:visual
         env:
