@@ -1,0 +1,392 @@
+name: Deploy pull request preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed, labeled, unlabeled]
+
+# Per-PR groups so queued previews are not cancelled when many PRs update at
+# once (a shared pages-publish group drops previously pending runs). Label
+# accept stays on its own group. cancel-in-progress only replaces stale runs
+# for the same PR. Parallel gh-pages pushes get a second deploy attempt below.
+concurrency:
+  group: ${{ contains(fromJSON('["labeled","unlabeled"]'), github.event.action) && format('visual-label-pr-{0}', github.event.number) || format('preview-pr-{0}', github.event.number) }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  preview:
+    if: >
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(fromJSON('["opened","reopened","synchronize"]'), github.event.action)
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA' }}
+    outputs:
+      preview_url: ${{ steps.urls.outputs.preview_url }}
+      visual_url: ${{ steps.urls.outputs.visual_url }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set preview URLs
+        id: urls
+        run: |
+          echo "preview_url=https://leasemate.singletonsd.com/pr-preview/pr-${{ github.event.number }}/" >> "$GITHUB_OUTPUT"
+          echo "visual_url=https://leasemate.singletonsd.com/pr-preview/pr-${{ github.event.number }}/visual/" >> "$GITHUB_OUTPUT"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting
+        run: pnpm format:check
+      - name: Lint and type-check
+        run: pnpm lint
+      - name: Run tests
+        run: pnpm test
+      - name: Check out PR base for visual baseline
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: visual-base
+      - name: Detect visual baseline
+        id: visual_base
+        run: |
+          if [ -f visual-base/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "PR base has no site package.json; capturing PR screenshots without a local baseline."
+          fi
+      - name: Install baseline dependencies
+        if: steps.visual_base.outputs.present == 'true'
+        working-directory: visual-base
+        run: pnpm install --frozen-lockfile
+      - name: Build visual baseline
+        if: steps.visual_base.outputs.present == 'true'
+        working-directory: visual-base
+        run: pnpm build
+      - name: Build PR site for visual compare
+        run: pnpm build
+      - name: Install Playwright browsers
+        run: pnpm playwright:install
+      - name: Capture visual screenshots
+        run: pnpm test:visual
+        env:
+          VISUAL_BASE_PATH: /
+          VISUAL_BASE_DIR: ${{ steps.visual_base.outputs.present == 'true' && format('{0}/visual-base/dist', github.workspace) || '' }}
+          VISUAL_SKIP_BASE: ${{ steps.visual_base.outputs.present == 'true' && '0' || '1' }}
+          VISUAL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      - name: Build preview site
+        run: pnpm build
+        env:
+          PREVIEW_BASE_PATH: /pr-preview/pr-${{ github.event.number }}/
+      - name: Host visual report under preview
+        run: |
+          rm -rf dist/visual
+          cp -R test-results/visual dist/visual
+      - name: Upload visual screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-pr-${{ github.event.number }}
+          path: test-results/visual
+          if-no-files-found: error
+          retention-days: 14
+      # pr-preview-action is composite; wretry cannot wrap it. Retry push races
+      # against production / other previews with a second attempt.
+      - name: Deploy preview
+        id: preview
+        continue-on-error: true
+        uses: rossjrw/pr-preview-action@v1.8.1
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          pages-base-url: https://leasemate.singletonsd.com
+          umbrella-dir: pr-preview
+          comment: false
+      - name: Retry deploy preview
+        if: steps.preview.outcome == 'failure'
+        uses: rossjrw/pr-preview-action@v1.8.1
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          pages-base-url: https://leasemate.singletonsd.com
+          umbrella-dir: pr-preview
+          comment: false
+      - name: Build sticky preview comment
+        uses: actions/github-script@v8
+        env:
+          PREVIEW_URL: ${{ steps.urls.outputs.preview_url }}
+          VISUAL_URL: ${{ steps.urls.outputs.visual_url }}
+        with:
+          script: |
+            const fs = require("node:fs");
+            const manifest = JSON.parse(
+              fs.readFileSync("test-results/visual/manifest.json", "utf8"),
+            );
+            const summary = manifest.summary ?? {
+              changed: 0,
+              new: 0,
+              unchanged: 0,
+              changedRoutes: [],
+              newRoutes: [],
+              hasDiffs: false,
+            };
+            const changedList =
+              summary.changedRoutes?.length > 0
+                ? summary.changedRoutes.map((r) => `\`${r}\``).join(", ")
+                : "—";
+            const newList =
+              summary.newRoutes?.length > 0
+                ? summary.newRoutes.map((r) => `\`${r}\``).join(", ")
+                : "—";
+            const statusLine = !summary.hasDiffs
+              ? "✅ Visual review clear vs PR base (no new or changed pages)."
+              : summary.changed > 0 && summary.new > 0
+                ? `⚠️ Visual review needed: ${summary.changed} changed route(s), ${summary.new} new. Open the report, then add \`visual-accepted\` (no rebuild).`
+                : summary.new > 0
+                  ? `⚠️ Visual review needed: ${summary.new} new page(s) vs base. Open the report, then add \`visual-accepted\` (no rebuild).`
+                  : `⚠️ Visual review needed: ${summary.changed} changed route(s) vs base. Open the report, then add \`visual-accepted\` (no rebuild).`;
+            const body = [
+              "## Preview",
+              "",
+              `🔗 **[Open live preview](${process.env.PREVIEW_URL})**`,
+              "",
+              `🖼️ **[Open visual report](${process.env.VISUAL_URL})** (base vs PR vs diff)`,
+              "",
+              statusLine,
+              "",
+              `- Changed routes: ${changedList}`,
+              `- New routes: ${newList}`,
+              `- Unchanged viewports: ${summary.unchanged ?? 0}`,
+              `- Required check: **visual-review** (cleared by \`visual-accepted\` after you review)`,
+              `- Artifact backup: \`visual-pr-${context.issue.number}\``,
+              "",
+            ].join("\n");
+            fs.writeFileSync("preview-comment.md", body);
+      - name: Post sticky preview comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: leasemate-preview
+          recreate: true
+          path: preview-comment.md
+      - name: Update preview link in pull request body
+        uses: actions/github-script@v8
+        env:
+          PREVIEW_URL: ${{ steps.urls.outputs.preview_url }}
+          VISUAL_URL: ${{ steps.urls.outputs.visual_url }}
+        with:
+          script: |
+            const markerStart = "<!-- leasemate-preview:start -->";
+            const markerEnd = "<!-- leasemate-preview:end -->";
+            const managedBlock = new RegExp(
+              `${markerStart}[\\s\\S]*?${markerEnd}\\n*`,
+              "m",
+            );
+            const pull = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const currentBody = pull.data.body ?? "";
+            const bodyWithoutPreview = currentBody.replace(managedBlock, "").trim();
+            const previewBlock = [
+              markerStart,
+              "## Preview",
+              "",
+              `🔗 **[Open live preview](${process.env.PREVIEW_URL})**`,
+              "",
+              `🖼️ **[Open visual report](${process.env.VISUAL_URL})**`,
+              markerEnd,
+            ].join("\n");
+            const body = `${previewBlock}${bodyWithoutPreview ? `\n\n${bodyWithoutPreview}` : ""}`;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body,
+            });
+
+  visual-review:
+    name: visual-review
+    needs: [preview]
+    if: >
+      always() &&
+      !cancelled() &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.action != 'closed' &&
+      (
+        needs.preview.result == 'success' ||
+        (
+          needs.preview.result == 'skipped' &&
+          contains(fromJSON('["labeled","unlabeled"]'), github.event.action) &&
+          github.event.label.name == 'visual-accepted'
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Detect visual-accepted label
+        id: accept
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const accepted = labels.some((l) => l.name === "visual-accepted");
+            core.setOutput("accepted", accepted ? "true" : "false");
+            if (accepted) {
+              core.info("Label visual-accepted is present; gate will pass without rebuild.");
+            }
+      - name: Accept intentional visual diffs
+        if: steps.accept.outputs.accepted == 'true'
+        run: |
+          echo "visual-accepted label present — clearing visual-review (no rebuild or re-screenshot)."
+      - name: Download visual artifact from this run
+        if: steps.accept.outputs.accepted != 'true' && needs.preview.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: visual-pr-${{ github.event.number }}
+          path: test-results/visual
+      - name: Download latest visual artifact for this PR
+        if: steps.accept.outputs.accepted != 'true' && needs.preview.result == 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          ARTIFACT="visual-pr-${{ github.event.number }}"
+          ID=""
+          for _ in $(seq 1 12); do
+            mapfile -t CANDIDATES < <(
+              gh api --paginate --slurp \
+                "repos/${{ github.repository }}/actions/artifacts?name=${ARTIFACT}&per_page=100" \
+                | jq -r --arg sha "$HEAD_SHA" '
+                  [.[] | .artifacts[]]
+                  | map(select(.expired == false and .workflow_run.head_sha == $sha))
+                  | .[].id
+                '
+            )
+            for candidate in "${CANDIDATES[@]:-}"; do
+              [ -n "$candidate" ] || continue
+              rm -rf /tmp/visual-candidate test-results/visual
+              mkdir -p /tmp/visual-candidate
+              gh api "repos/${{ github.repository }}/actions/artifacts/${candidate}/zip" \
+                > /tmp/visual-candidate.zip
+              unzip -qo /tmp/visual-candidate.zip -d /tmp/visual-candidate
+              ARTIFACT_BASE_SHA="$(
+                jq -r '.baseSha // empty' /tmp/visual-candidate/manifest.json
+              )"
+              if [ -z "$ARTIFACT_BASE_SHA" ]; then
+                echo "Skipping artifact ${candidate}: missing manifest.baseSha"
+                continue
+              fi
+              if [ "$ARTIFACT_BASE_SHA" != "$BASE_SHA" ]; then
+                echo "Skipping artifact ${candidate}: baseSha ${ARTIFACT_BASE_SHA} != ${BASE_SHA}"
+                continue
+              fi
+              mkdir -p test-results/visual
+              cp -R /tmp/visual-candidate/. test-results/visual/
+              ID="$candidate"
+              break
+            done
+            if [ -n "$ID" ]; then
+              break
+            fi
+            echo "No ${ARTIFACT} artifact for head ${HEAD_SHA} + base ${BASE_SHA} yet; waiting..."
+            sleep 20
+          done
+          if [ -z "$ID" ]; then
+            echo "No ${ARTIFACT} artifact for head ${HEAD_SHA} with base ${BASE_SHA}."
+            exit 1
+          fi
+          echo "Using artifact ${ID} for head ${HEAD_SHA} base ${BASE_SHA}"
+          python3 - <<'PY'
+          import json, pathlib
+          manifest = json.loads(pathlib.Path("test-results/visual/manifest.json").read_text())
+          summary = manifest.get("summary") or {}
+          print(
+              f"Artifact summary: changed={summary.get('changed')} new={summary.get('new')} "
+              f"hasDiffs={summary.get('hasDiffs')} baseSha={manifest.get('baseSha')} "
+              f"baseLabel={manifest.get('baseLabel')}"
+          )
+          PY
+      - name: Set up Node.js
+        if: steps.accept.outputs.accepted != 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Run visual gate
+        if: steps.accept.outputs.accepted != 'true'
+        run: node tests/visual-gate.mjs
+
+  cleanup:
+    if: >
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Remove preview
+        id: remove_preview
+        continue-on-error: true
+        uses: rossjrw/pr-preview-action@v1.8.1
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          pages-base-url: https://leasemate.singletonsd.com
+          umbrella-dir: pr-preview
+          comment: false
+      - name: Retry remove preview
+        if: steps.remove_preview.outcome == 'failure'
+        uses: rossjrw/pr-preview-action@v1.8.1
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          pages-base-url: https://leasemate.singletonsd.com
+          umbrella-dir: pr-preview
+          comment: false
+      - name: Hide sticky preview comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: leasemate-preview
+          hide: true
+      - name: Remove preview block from pull request body
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const markerStart = "<!-- leasemate-preview:start -->";
+            const markerEnd = "<!-- leasemate-preview:end -->";
+            const managedBlock = new RegExp(
+              `${markerStart}[\\s\\S]*?${markerEnd}\\n*`,
+              "m",
+            );
+            const pull = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const currentBody = pull.data.body ?? "";
+            const body = currentBody.replace(managedBlock, "").trim();
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body,
+            });

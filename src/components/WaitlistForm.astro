@@ -1,0 +1,53 @@
+---
+import WaitlistFormIsland from "./WaitlistFormIsland";
+import { isLeadIntakeEnabled } from "../lib/lead-intake-flag";
+import { withBase } from "../lib/nav";
+
+interface Props {
+  successTitle?: string;
+  successBody?: string;
+  submitLabel?: string;
+  openingSoonTitle?: string;
+  openingSoonBody?: string;
+}
+
+const {
+  successTitle = "You're on the list.",
+  successBody = "Thank you. We will email you when LeaseMate waitlist places open.",
+  submitLabel = "Join waitlist",
+  openingSoonTitle = "Waitlist opening soon",
+  openingSoonBody = "Lead intake is paused while we finish a backend fix. Leave this page bookmarked — we will open the waitlist here.",
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const privacyHref = withBase("/privacy", base);
+const featuresHref = withBase("/features", base);
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as
+  string | undefined;
+const leadIntakeOn = isLeadIntakeEnabled(
+  import.meta.env.PUBLIC_LEAD_INTAKE_ENABLED,
+);
+---
+
+{
+  leadIntakeOn ? (
+    <WaitlistFormIsland
+      client:load
+      successTitle={successTitle}
+      successBody={successBody}
+      submitLabel={submitLabel}
+      privacyHref={privacyHref}
+      featuresHref={featuresHref}
+      turnstileSiteKey={turnstileSiteKey}
+    />
+  ) : (
+    <div
+      class="contact-form__success"
+      data-waitlist-opening-soon=""
+      role="status"
+    >
+      <h2>{openingSoonTitle}</h2>
+      <p>{openingSoonBody}</p>
+    </div>
+  )
+}

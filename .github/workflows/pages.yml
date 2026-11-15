@@ -1,0 +1,72 @@
+name: Deploy production GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting
+        run: pnpm format:check
+      - name: Lint and type-check
+        run: pnpm lint
+      - name: Run tests
+        run: pnpm test
+      - name: Require Turnstile site key when lead intake is on
+        env:
+          PUBLIC_LEAD_INTAKE_ENABLED: ${{ vars.PUBLIC_LEAD_INTAKE_ENABLED }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+        run: |
+          case "${PUBLIC_LEAD_INTAKE_ENABLED:-}" in
+            true|TRUE|1|yes|YES) enabled=1 ;;
+            *) enabled=0 ;;
+          esac
+          if [ "$enabled" = 1 ] && [ -z "${PUBLIC_TURNSTILE_SITE_KEY:-}" ]; then
+            echo "::error::Set repository variable PUBLIC_TURNSTILE_SITE_KEY (public site key only) before enabling PUBLIC_LEAD_INTAKE_ENABLED."
+            exit 1
+          fi
+      - name: Build production site
+        run: pnpm build
+        env:
+          PUBLIC_LEAD_INTAKE_ENABLED: ${{ vars.PUBLIC_LEAD_INTAKE_ENABLED }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+
+      - name: Install Playwright browsers
+        run: pnpm playwright:install
+
+      - name: SEO metadata checks
+        run: pnpm test:seo
+
+      - name: Accessibility checks
+        run: pnpm test:a11y
+
+      - name: Deploy production site
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
+        with:
+          branch: gh-pages
+          folder: dist
+          clean: true
+          clean-exclude: pr-preview
