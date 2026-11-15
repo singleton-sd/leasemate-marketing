@@ -134,6 +134,53 @@ test("visual screenshot helper is wired for hosted report and gate", async () =>
   assert.match(deployment, /visual-review/);
 });
 
+function workflowJobs(yaml) {
+  const jobsSection = yaml
+    .split(/^jobs:\n/m)
+    .slice(1)
+    .join("jobs:\n");
+  const jobs = [];
+  let current = null;
+  for (const line of jobsSection.split("\n")) {
+    const header = /^ {2}([A-Za-z0-9_-]+):\s*$/.exec(line);
+    if (header) {
+      if (current) jobs.push(current);
+      current = { name: header[1], body: "" };
+      continue;
+    }
+    if (current) current.body += `${line}\n`;
+  }
+  if (current) jobs.push(current);
+  return jobs;
+}
+
+test("Pages push jobs check out a git workspace before JamesIves or pr-preview", async () => {
+  const pages = await readFile(
+    new URL(".github/workflows/pages.yml", root),
+    "utf8",
+  );
+  const preview = await readFile(
+    new URL(".github/workflows/preview.yml", root),
+    "utf8",
+  );
+  const pushJobs = [...workflowJobs(pages), ...workflowJobs(preview)].filter(
+    (job) =>
+      /JamesIves\/github-pages-deploy-action/.test(job.body) ||
+      /rossjrw\/pr-preview-action/.test(job.body),
+  );
+  assert.ok(
+    pushJobs.length >= 3,
+    "expected deploy, deploy-preview, and cleanup-preview push jobs",
+  );
+  for (const job of pushJobs) {
+    assert.match(
+      job.body,
+      /steps:\n {6}- name: [^\n]+\n {8}uses: actions\/checkout@[0-9a-f]{40} # v7(?:\.\d+\.\d+)?\n {8}with:\n {10}persist-credentials:\s*false\n/,
+      `${job.name} must check out with persist-credentials: false before the Pages push action`,
+    );
+  }
+});
+
 test("Pages branch includes the production custom domain", async () => {
   const cname = await readFile(new URL("public/CNAME", root), "utf8");
   assert.equal(cname.trim(), "leasemate.singletonsd.com");
