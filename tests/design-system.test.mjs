@@ -56,6 +56,7 @@ test("header and footer expose the LeaseMate IA", async () => {
   assert.match(header, /Join waitlist/);
   assert.match(header, /aria-current=\{/);
   assert.match(footer, /aria-label="Footer"/);
+  assert.match(footer, /house owners and lease holders in Victoria/);
   assert.match(footer, /© 2026 LeaseMate/);
 
   assert.deepEqual(

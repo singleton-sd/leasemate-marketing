@@ -34,6 +34,10 @@ test("waitlist form renders the opening-soon branch unless the flag is on", asyn
   assert.match(form, /WaitlistFormIsland/);
   assert.match(form, /data-waitlist-opening-soon/);
   assert.match(form, /Waitlist opening soon/);
+  assert.match(
+    form,
+    /The waitlist form is temporarily closed\. Check back here soon\./,
+  );
   assert.match(form, /leadIntakeOn \? \(/);
   assert.match(envExample, /PUBLIC_LEAD_INTAKE_ENABLED=false/);
 });
