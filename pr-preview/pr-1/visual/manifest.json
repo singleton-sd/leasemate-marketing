@@ -1,0 +1,226 @@
+{
+  "basePath": "/",
+  "baseSha": null,
+  "baseLabel": null,
+  "baseSiteUrl": null,
+  "baseDistDir": null,
+  "summary": {
+    "total": 18,
+    "unchanged": 0,
+    "changed": 0,
+    "new": 9,
+    "changedRoutes": [],
+    "newRoutes": [
+      "/",
+      "404",
+      "contact",
+      "contact?role=advertiser",
+      "contact?role=venue",
+      "features",
+      "pricing",
+      "privacy",
+      "terms"
+    ],
+    "hasDiffs": true
+  },
+  "routes": [
+    {
+      "route": "404",
+      "viewport": "desktop",
+      "prFile": "pr/404-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/404",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "404",
+      "viewport": "mobile",
+      "prFile": "pr/404-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/404",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact",
+      "viewport": "desktop",
+      "prFile": "pr/contact-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact",
+      "viewport": "mobile",
+      "prFile": "pr/contact-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "features",
+      "viewport": "desktop",
+      "prFile": "pr/features-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/features",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "features",
+      "viewport": "mobile",
+      "prFile": "pr/features-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/features",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "prFile": "pr/home-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "prFile": "pr/home-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "pricing",
+      "viewport": "desktop",
+      "prFile": "pr/pricing-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/pricing",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "pricing",
+      "viewport": "mobile",
+      "prFile": "pr/pricing-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/pricing",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "privacy",
+      "viewport": "desktop",
+      "prFile": "pr/privacy-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/privacy",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "privacy",
+      "viewport": "mobile",
+      "prFile": "pr/privacy-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/privacy",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "terms",
+      "viewport": "desktop",
+      "prFile": "pr/terms-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/terms",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "terms",
+      "viewport": "mobile",
+      "prFile": "pr/terms-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/terms",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact?role=venue",
+      "viewport": "desktop",
+      "prFile": "pr/contact-role-venue-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact?role=venue",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact?role=venue",
+      "viewport": "mobile",
+      "prFile": "pr/contact-role-venue-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact?role=venue",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact?role=advertiser",
+      "viewport": "desktop",
+      "prFile": "pr/contact-role-advertiser-desktop.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact?role=advertiser",
+      "baseUrl": null,
+      "status": "new"
+    },
+    {
+      "route": "contact?role=advertiser",
+      "viewport": "mobile",
+      "prFile": "pr/contact-role-advertiser-mobile.png",
+      "baseFile": null,
+      "diffFile": null,
+      "mismatched": 0,
+      "prUrl": "/contact?role=advertiser",
+      "baseUrl": null,
+      "status": "new"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+backend:
+  name: github
+  repo: singleton-sd/leasemate-marketing
+  branch: main
+  # Shared Decap OAuth on the Singleton SD API gateway; callback https://api.singletonsd.com/v1/cms-auth/callback
+  base_url: https://api.singletonsd.com
+  auth_endpoint: v1/cms-auth/auth
+
+publish_mode: editorial_workflow
+
+site_url: https://leasemate.singletonsd.com
+display_url: https://leasemate.singletonsd.com
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: pages
+    label: Pages
+    files:
+      - label: Waitlist
+        file: src/content/pages/contact.md
+        name: contact
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: contact
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Headline
+            name: headline
+            widget: string
+          - label: Summary
+            name: summary
+            widget: text
+            hint: Hero lead / supporting sentence.
+          - label: Eyebrow
+            name: eyebrow
+            widget: string
+            required: false
+          - label: Email
+            name: email
+            widget: string
+            required: false
+          - label: Status
+            name: status
+            widget: string
+            required: false
+          - label: Submit label
+            name: submitLabel
+            widget: string
+            required: false
+          - label: Success title
+            name: successTitle
+            widget: string
+            required: false
+          - label: Success body
+            name: successBody
+            widget: text
+            required: false
+          - label: Opening soon title
+            name: openingSoonTitle
+            widget: string
+            required: false
+          - label: Opening soon body
+            name: openingSoonBody
+            widget: text
+            required: false
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown
+      - label: Features
+        file: src/content/pages/features.md
+        name: features
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: features
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Headline
+            name: headline
+            widget: string
+          - label: Summary
+            name: summary
+            widget: text
+            hint: Hero lead / supporting sentence.
+          - label: Eyebrow
+            name: eyebrow
+            widget: string
+            required: false
+          - label: Features
+            name: features
+            widget: list
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown
+      - label: Home
+        file: src/content/pages/home.md
+        name: home
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: home
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Headline
+            name: headline
+            widget: string
+          - label: Summary
+            name: summary
+            widget: text
+            hint: Hero lead / supporting sentence.
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown
+      - label: Pricing
+        file: src/content/pages/pricing.md
+        name: pricing
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: pricing
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Headline
+            name: headline
+            widget: string
+          - label: Summary
+            name: summary
+            widget: text
+            hint: Hero lead / supporting sentence.
+          - label: Eyebrow
+            name: eyebrow
+            widget: string
+            required: false
+          - label: Note
+            name: note
+            widget: text
+            required: false
+          - label: Placeholder
+            name: placeholder
+            widget: hidden
+            default: true
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown
