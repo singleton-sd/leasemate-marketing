@@ -27,6 +27,25 @@ assert.ok(
 );
 
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+const expectedHead = (process.env.VISUAL_HEAD_SHA ?? "").trim();
+const artifactHead = String(manifest.headSha ?? "").trim();
+
+if (expectedHead) {
+  if (!artifactHead) {
+    console.error(
+      `Visual artifact is missing headSha; cannot confirm it matches current head ${expectedHead}.`,
+    );
+    process.exit(1);
+  }
+  if (artifactHead !== expectedHead) {
+    console.error(
+      `Visual artifact headSha ${artifactHead} does not match current head ${expectedHead}.`,
+    );
+    process.exit(1);
+  }
+  console.log(`Visual artifact headSha matches current head ${expectedHead}.`);
+}
+
 const summary = manifest.summary ?? {
   total: manifest.routes?.length ?? 0,
   unchanged: 0,

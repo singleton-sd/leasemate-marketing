@@ -25,12 +25,24 @@ workflow:
 
 Pull requests from forks are not given write access to publish.
 
+Build, tests, and visual capture run with `contents: read` and
+`persist-credentials: false`. A separate deploy job downloads the `dist`
+artifact, mints a short-lived **singleton-release** GitHub App token
+(`vars.RELEASE_APP_ID` and `secrets.RELEASE_APP_PRIVATE_KEY`, limited to this
+repository), and passes that token to the gh-pages push. There is no
+`GITHUB_TOKEN` fallback on the push path. Adding the App (or its secrets) to
+this repository is a Pato step.
+
+A label-triggered **`visual-review`** run still downloads the visual artifact
+for the current PR head and fails unless `manifest.headSha` matches that head.
+
 ## Visual review and accept
 
 1. Open the sticky **Preview** comment → **Open visual report**
 2. If **`visual-review`** is red, review base / PR / diff
 3. When the changes are intentional, add the **`visual-accepted`** label
 4. A thin workflow run clears **`visual-review`** automatically (no rebuild)
+   only if the reviewed artifact is for the current head SHA
 
 ## One-time GitHub Pages configuration
 
@@ -39,8 +51,9 @@ the repository root. Set the custom domain to `leasemate.singletonsd.com`.
 The production build includes a matching `CNAME` file so branch deployments
 retain the custom domain.
 
-Under **Settings > Actions > General > Workflow permissions**, select **Read
-and write permissions**.
+Workflow `GITHUB_TOKEN` stays read-only. The singleton-release GitHub App
+needs to be installed on this repository (Pato) so Pages deploys can mint a
+write token.
 
 GitHub provisions the TLS certificate after DNS resolves. Enable **Enforce
 HTTPS** only after the certificate is available.

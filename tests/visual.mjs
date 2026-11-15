@@ -30,6 +30,7 @@
  * - VISUAL_BASE_PATH — Astro base used for the PR (and baseline) build
  * - VISUAL_BASE_DIR — local baseline `dist/` directory (preferred over URL)
  * - VISUAL_BASE_SHA — git SHA of the baseline build (recorded in manifest)
+ * - VISUAL_HEAD_SHA — git SHA of the PR head (recorded in manifest)
  * - VISUAL_BASE_URL — remote “before” site if VISUAL_BASE_DIR is unset
  * - VISUAL_PORT — fixed local port for the PR server (default: ephemeral)
  * - VISUAL_SKIP_BASE — set to `1` to only capture the PR build
@@ -63,6 +64,7 @@ const baseDistDir = process.env.VISUAL_BASE_DIR
   ? path.resolve(process.env.VISUAL_BASE_DIR)
   : null;
 const baseSha = (process.env.VISUAL_BASE_SHA ?? "").trim() || null;
+const headSha = (process.env.VISUAL_HEAD_SHA ?? "").trim() || null;
 const baseSiteUrl = (
   process.env.VISUAL_BASE_URL ?? "https://leasemate.singletonsd.com"
 ).replace(/\/$/, "");
@@ -615,6 +617,7 @@ await writeFile(
   `${JSON.stringify(
     {
       basePath,
+      headSha,
       baseSha: skipBase ? null : baseSha,
       baseLabel: skipBase ? null : baseLabel,
       baseSiteUrl: skipBase || baseDistDir ? null : baseSiteUrl,
