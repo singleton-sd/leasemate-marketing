@@ -30,7 +30,10 @@ test("Pages workflow deploys main without deleting active previews", async () =>
     "utf8",
   );
   assert.match(workflow, /branches:\s*\[main\]/);
-  assert.match(workflow, /JamesIves\/github-pages-deploy-action@v4\.8\.0/);
+  assert.match(
+    workflow,
+    /JamesIves\/github-pages-deploy-action@[0-9a-f]{40} # v4\.8\.0/,
+  );
   assert.match(workflow, /branch:\s*gh-pages/);
   assert.match(workflow, /clean-exclude:\s*pr-preview/);
   assert.doesNotMatch(workflow, /secrets\./);
@@ -46,7 +49,7 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
     new URL(".github/workflows/preview.yml", root),
     "utf8",
   );
-  assert.match(workflow, /rossjrw\/pr-preview-action@v1\.8\.1/);
+  assert.match(workflow, /rossjrw\/pr-preview-action@[0-9a-f]{40} # v1\.8\.1/);
   assert.match(workflow, /PREVIEW_BASE_PATH:\s*\/pr-preview\/pr-/);
   assert.match(
     workflow,
@@ -54,7 +57,10 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   );
   assert.match(workflow, /pull-requests:\s*write/);
   assert.match(workflow, /leasemate-preview:start/);
-  assert.match(workflow, /sticky-pull-request-comment@v2/);
+  assert.match(workflow, /sticky-pull-request-comment@[0-9a-f]{40} # v2\.9\.4/);
+  assert.match(workflow, /PR_NUMBER:\s*\$\{\{\s*github\.event\.number\s*\}\}/);
+  assert.match(workflow, /GH_REPOSITORY:\s*\$\{\{\s*github\.repository\s*\}\}/);
+  assert.match(workflow, /ARTIFACT="visual-pr-\$\{PR_NUMBER\}"/);
   assert.match(workflow, /header:\s*leasemate-preview/);
   assert.match(workflow, /pnpm test:visual/);
   assert.match(workflow, /name:\s*visual-review/);

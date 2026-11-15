@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 /*
-  Primitive and role tokens come from @singleton-sd/tokens 1.7.0.
+  Primitive and role tokens come from @singleton-sd/tokens 1.8.0.
   LeaseMate semantic aliases (--lm-*) live in this file only.
   Primary button labels stay black on gold (not text.on-brand / gray-900).
 */

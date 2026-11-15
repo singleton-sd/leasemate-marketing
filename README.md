@@ -24,7 +24,7 @@ Run the full local quality gate with `pnpm verify`.
 - Decap CMS at `/admin/`
 - GitHub Pages at `leasemate.singletonsd.com`
 
-The shared `@singleton-sd/tokens` 1.7.0 package is installed from the
+The shared `@singleton-sd/tokens` 1.8.0 package is installed from the
 GitLab npm registry (`@singleton-sd` scope in `.npmrc`). LeaseMate aliases
 (`--lm-*`) in `src/styles/global.css` map to those token roles. Primary
 button labels stay black on gold.

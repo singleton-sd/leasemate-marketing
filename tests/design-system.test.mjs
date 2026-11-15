@@ -8,7 +8,7 @@ const root = new URL("../", import.meta.url);
 test("design tokens match LeaseMate dark-first branding", async () => {
   const pkg = await readFile(new URL("package.json", root), "utf8");
   const styles = await readFile(new URL("src/styles/global.css", root), "utf8");
-  assert.match(pkg, /"@singleton-sd\/tokens":\s*"1\.7\.0"/);
+  assert.match(pkg, /"@singleton-sd\/tokens":\s*"1\.8\.0"/);
   assert.match(styles, /@import "@singleton-sd\/tokens\/css\/root\/dark"/);
   assert.match(styles, /--lm-canvas:\s*var\(--ssd-color-background-default\)/);
   assert.match(styles, /--lm-surface:\s*var\(--ssd-color-background-muted\)/);
@@ -44,6 +44,17 @@ test("shell includes skip navigation", async () => {
     "utf8",
   );
   assert.match(layout, /Skip to content/);
+});
+
+test("JSON-LD escapes < to prevent script breakout", async () => {
+  const layout = await readFile(
+    new URL("src/layouts/BaseLayout.astro", root),
+    "utf8",
+  );
+  assert.match(
+    layout,
+    /JSON\.stringify\(jsonLd\)\.replaceAll\("<", "\\\\u003c"\)/,
+  );
 });
 
 test("motion respects the user reduced-motion preference", async () => {

@@ -28,6 +28,16 @@ test("generated Decap config matches the committed file", async () => {
   assert.equal(generated, committed);
 });
 
+test("Decap CMS admin script is version-pinned with SRI", async () => {
+  const html = await readFile(new URL("public/admin/index.html", root), "utf8");
+  assert.match(html, /unpkg\.com\/decap-cms@3\.15\.1\/dist\/decap-cms\.js/);
+  assert.match(
+    html,
+    /integrity="sha384-in6eHztHveqQ7uMZ1fDaKlDmacQLFuLH2wWrFTiymyuS8zQ5bixwL8U3AeRi8h\/L"/,
+  );
+  assert.match(html, /crossorigin="anonymous"/);
+});
+
 test("Decap pages collection is generated per page file", async () => {
   const config = await readFile(
     new URL("public/admin/config.yml", root),

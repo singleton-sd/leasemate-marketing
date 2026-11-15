@@ -18,8 +18,8 @@ importers:
         specifier: ^5.9.1
         version: 5.9.2(ajv@8.20.0)(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
       '@singleton-sd/tokens':
-        specifier: 1.7.0
-        version: 1.7.0
+        specifier: 1.8.0
+        version: 1.8.0
       astro:
         specifier: ^7.2.3
         version: 7.4.12(@types/node@26.6.6)(jiti@2.7.0)(yaml@2.9.1)
@@ -942,8 +942,8 @@ packages:
   '@shikijs/vscode-textmate@10.1.0':
     resolution: {integrity: sha512-cVBuhDQjBZaNMTwBquYfPydrUP+E3hE6oYGasx8h6ZrODIM7/r+gxLDXdd66oszbrggZHEntdE6j+5gYIVyMWQ==}
 
-  '@singleton-sd/tokens@1.7.0':
-    resolution: {integrity: sha1-21GoFf12XQjyF8TonZ+qg1Absjw=, tarball: https://gitlab.com/api/v4/projects/70589530/packages/npm/@singleton-sd/tokens/-/@singleton-sd/tokens-1.7.0.tgz}
+  '@singleton-sd/tokens@1.8.0':
+    resolution: {integrity: sha1-6cArgDnJzsJPZyDdjtWDfS1FLc4=, tarball: https://gitlab.com/api/v4/projects/70589530/packages/npm/@singleton-sd/tokens/-/@singleton-sd/tokens-1.8.0.tgz}
     engines: {node: 22.x}
 
   '@standard-schema/utils@0.3.0':
@@ -3340,7 +3340,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.1.0': {}
 
-  '@singleton-sd/tokens@1.7.0': {}
+  '@singleton-sd/tokens@1.8.0': {}
 
   '@standard-schema/utils@0.3.0': {}
 
