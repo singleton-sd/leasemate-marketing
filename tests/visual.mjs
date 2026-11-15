@@ -18,6 +18,11 @@
  * - `index.html` — side-by-side review page (routes grouped; unchanged collapsed)
  * - `manifest.json` — includes `summary` for CI gating
  *
+ * Extra interaction shots (hover, focus, open mobile nav, waitlist form
+ * states) are captured from this harness only. The waitlist-on dist is built
+ * here with PUBLIC_LEAD_INTAKE_ENABLED=true and is never used for the shipped
+ * preview/production config.
+ *
  * Capture always exits 0 on successful screenshots. Use `pnpm test:visual:gate`
  * (or CI job `visual-review`) to fail when routes are `changed` or `new`.
  *
@@ -30,6 +35,7 @@
  * - VISUAL_SKIP_BASE — set to `1` to only capture the PR build
  */
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import http from "node:http";
 import {
   createReadStream,
@@ -220,29 +226,35 @@ async function listen(server, preferredPort = 0) {
   return actual;
 }
 
+function installTurnstileStub() {
+  window.turnstile = {
+    render(container, options) {
+      if (container instanceof HTMLElement) {
+        container.dataset.turnstileStub = "true";
+      }
+      const callback = options?.callback;
+      if (typeof callback === "function") {
+        queueMicrotask(() => callback("visual-turnstile-token"));
+      }
+      return "visual-stub";
+    },
+    reset() {},
+    remove() {},
+  };
+}
+
 async function screenshotPage(
   browser,
   url,
   viewport,
   filePath,
-  { allowNotFound = false } = {},
+  { allowNotFound = false, prepare = null } = {},
 ) {
   const context = await browser.newContext({
     viewport: { width: viewport.width, height: viewport.height },
     deviceScaleFactor: 1,
   });
-  await context.addInitScript(() => {
-    window.turnstile = {
-      render(container) {
-        if (container instanceof HTMLElement) {
-          container.dataset.turnstileStub = "true";
-        }
-        return "visual-stub";
-      },
-      reset() {},
-      remove() {},
-    };
-  });
+  await context.addInitScript(installTurnstileStub);
   const page = await context.newPage();
   try {
     const response = await page.goto(url, {
@@ -256,6 +268,9 @@ async function screenshotPage(
     if (status >= 400 && !(allowNotFound && status === 404)) {
       return { ok: false, status };
     }
+    if (prepare) {
+      await prepare(page);
+    }
     await page.screenshot({
       path: filePath,
       fullPage: true,
@@ -265,6 +280,36 @@ async function screenshotPage(
   } finally {
     await context.close();
   }
+}
+
+async function waitForWaitlistForm(page) {
+  await page.locator("[data-waitlist-form]").waitFor();
+  await page.locator("[data-waitlist-form-submit]:not([disabled])").waitFor({
+    timeout: 15_000,
+  });
+}
+
+function ensureWaitlistDist() {
+  const out = path.join(rootDir, "test-results", "dist-waitlist-on");
+  mkdirSync(path.dirname(out), { recursive: true });
+  const result = spawnSync(
+    "pnpm",
+    ["exec", "astro", "build", "--outDir", out],
+    {
+      cwd: rootDir,
+      env: {
+        ...process.env,
+        PUBLIC_LEAD_INTAKE_ENABLED: "true",
+        PUBLIC_TURNSTILE_SITE_KEY:
+          process.env.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA",
+      },
+      stdio: "inherit",
+    },
+  );
+  if (result.status !== 0) {
+    throw new Error("Failed to build waitlist-on dist for visual captures.");
+  }
+  return out;
 }
 
 function padPng(img, width, height) {
@@ -305,6 +350,11 @@ function diffPngs(baseFilePath, prFilePath, diffFilePath) {
   return mismatched;
 }
 
+await rm(outDir, { recursive: true, force: true });
+for (const dir of ["pr", "base", "diff"]) {
+  mkdirSync(path.join(outDir, dir), { recursive: true });
+}
+
 const prServer = createStaticServer(distDir, basePath);
 const prPort = await listen(prServer, port);
 const prOrigin = `http://127.0.0.1:${prPort}`;
@@ -317,31 +367,154 @@ if (!skipBase && baseDistDir) {
   baseOrigin = `http://127.0.0.1:${basePort}`;
 }
 
-await rm(outDir, { recursive: true, force: true });
-for (const dir of ["pr", "base", "diff"]) {
-  mkdirSync(path.join(outDir, dir), { recursive: true });
-}
+const waitlistDist = ensureWaitlistDist();
+const waitlistServer = createStaticServer(waitlistDist, basePath);
+const waitlistPort = await listen(waitlistServer, 0);
+const waitlistOrigin = `http://127.0.0.1:${waitlistPort}`;
 
 const routes = collectHtmlRoutes();
 assert.ok(routes.length > 0, "Expected at least one HTML route in dist/");
 
-const captures = routes.map((route) => ({
+const VIEWPORTS = {
+  desktop: { name: "desktop", width: 1440, height: 900 },
+  mobile: { name: "mobile", width: 390, height: 844 },
+  "mobile-375": { name: "mobile-375", width: 375, height: 812 },
+};
+const defaultViewports = [
+  VIEWPORTS.desktop,
+  VIEWPORTS.mobile,
+  VIEWPORTS["mobile-375"],
+];
+
+const routeCaptures = routes.map((route) => ({
+  origin: prOrigin,
   urlPath: route.urlPath,
   query: "",
   id: routeSlug(route.urlPath),
+  viewports: defaultViewports,
+  compareBase: true,
+  prepare: null,
 }));
 
-const viewports = [
-  { name: "desktop", width: 1440, height: 900 },
-  { name: "mobile", width: 390, height: 844 },
+const stateCaptures = [
+  {
+    origin: prOrigin,
+    urlPath: "",
+    query: "",
+    id: "home-hover-primary",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await page.locator(".button-link--primary").first().hover();
+    },
+  },
+  {
+    origin: prOrigin,
+    urlPath: "",
+    query: "",
+    id: "home-focus-primary",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await page.locator(".button-link--primary").first().focus();
+    },
+  },
+  {
+    origin: prOrigin,
+    urlPath: "",
+    query: "",
+    id: "home-mobile-menu",
+    viewports: [VIEWPORTS.mobile, VIEWPORTS["mobile-375"]],
+    compareBase: false,
+    prepare: async (page) => {
+      await page.locator("[data-nav-toggle]").click();
+      await page.locator("#site-primary-nav.is-open").waitFor();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-waitlist-idle",
+    viewports: defaultViewports,
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForWaitlistForm(page);
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-waitlist-focus",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForWaitlistForm(page);
+      await page.locator("#waitlist-name").focus();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-waitlist-invalid",
+    viewports: [VIEWPORTS.desktop, VIEWPORTS.mobile],
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForWaitlistForm(page);
+      await page.locator("[data-waitlist-form-submit]").click();
+      await page.locator("#waitlist-name[aria-invalid='true']").waitFor();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-waitlist-hover-submit",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForWaitlistForm(page);
+      await page.locator("[data-waitlist-form-submit]").hover();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-waitlist-success",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await page.route(
+        "https://api.singletonsd.com/v1/leads",
+        async (route) => {
+          await route.fulfill({
+            status: 202,
+            contentType: "application/json",
+            body: JSON.stringify({ id: "visual-lead" }),
+          });
+        },
+      );
+      await waitForWaitlistForm(page);
+      await page.locator("#waitlist-name").fill("Ada Lovelace");
+      await page.locator("#waitlist-email").fill("ada@example.com");
+      await page.locator("#waitlist-consent").check();
+      await page.locator("[data-waitlist-form-submit]").click();
+      await page
+        .locator("[data-waitlist-form-success]:not([hidden])")
+        .waitFor();
+    },
+  },
 ];
 
 const browser = await chromium.launch();
 const manifest = [];
 
 try {
-  for (const capture of captures) {
-    for (const viewport of viewports) {
+  for (const capture of [...routeCaptures, ...stateCaptures]) {
+    for (const viewport of capture.viewports) {
       const slug = `${capture.id}-${viewport.name}`;
       const prRel = `pr/${slug}.png`;
       const baseRel = `base/${slug}.png`;
@@ -351,8 +524,10 @@ try {
       const diffFile = path.join(outDir, diffRel);
 
       const pathWithQuery = `${publicUrl(capture.urlPath)}${capture.query}`;
-      const prUrl = `${prOrigin}${pathWithQuery}`;
-      const prShot = await screenshotPage(browser, prUrl, viewport, prFile);
+      const prUrl = `${capture.origin}${pathWithQuery}`;
+      const prShot = await screenshotPage(browser, prUrl, viewport, prFile, {
+        prepare: capture.prepare,
+      });
       assert.ok(
         prShot.ok && prShot.status < 400,
         `Failed to load PR route ${prUrl}: ${prShot.status}`,
@@ -362,7 +537,7 @@ try {
       let baseMissing = false;
       let mismatched = 0;
       let baseUrl = null;
-      if (!skipBase) {
+      if (!skipBase && capture.compareBase) {
         baseUrl = baseOrigin
           ? `${baseOrigin}${publicUrl(capture.urlPath)}${capture.query}`
           : `${baseSiteUrl}${sitePath(capture.urlPath)}${capture.query}`;
@@ -393,7 +568,9 @@ try {
             ? "changed"
             : "unchanged";
 
-      const routeLabel = `${capture.urlPath || "/"}${capture.query}`;
+      const routeLabel = capture.compareBase
+        ? `${capture.urlPath || "/"}${capture.query}`
+        : `state:${capture.id}`;
       manifest.push({
         route: routeLabel,
         viewport: viewport.name,
@@ -402,7 +579,7 @@ try {
         diffFile: mismatched > 0 ? diffRel : null,
         mismatched: mismatched > 0 ? mismatched : 0,
         prUrl: pathWithQuery,
-        baseUrl: skipBase ? null : baseUrl,
+        baseUrl: skipBase || !capture.compareBase ? null : baseUrl,
         status,
       });
     }
@@ -410,6 +587,7 @@ try {
 } finally {
   await browser.close();
   prServer.close();
+  waitlistServer.close();
   baseServer?.close();
 }
 

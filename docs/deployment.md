@@ -11,9 +11,10 @@ workflow:
 
 1. Posts a **sticky PR comment** with the live preview link
 2. Puts a managed **Preview** section at the **top** of the PR body
-3. Captures Playwright full-page screenshots (desktop 1440 + mobile 390) for
-   every built HTML route, compares each route to a **build of the PR base
-   SHA**, and hosts a report at `…/pr-<number>/visual/`
+3. Captures Playwright full-page screenshots (desktop 1440, mobile 390, and 375) for every built HTML route, plus hover/focus, open mobile nav, and
+   waitlist form states (flag on only in the screenshot harness). Compares
+   each default route to a **build of the PR base SHA**, and hosts a report
+   at `…/pr-<number>/visual/`
 4. Runs a required **`visual-review`** status check that **fails** when any
    route is `changed` or `new` vs that base build. New routes still capture
    the baseline `404` page as “before” when a baseline dist exists. The first

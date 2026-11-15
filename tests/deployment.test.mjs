@@ -81,10 +81,11 @@ test("visual screenshot helper is wired for hosted report and gate", async () =>
   assert.match(pkg, /"test:visual":\s*"node tests\/visual\.mjs"/);
   assert.match(pkg, /"test:visual:gate":\s*"node tests\/visual-gate\.mjs"/);
   assert.match(visual, /leasemate\.singletonsd\.com/);
-  assert.doesNotMatch(
-    visual,
-    /role=advertiser|role=venue|EXTRA_VISUAL_CAPTURES/,
-  );
+  assert.doesNotMatch(visual, /role=advertiser|role=venue/);
+  assert.match(visual, /mobile-375/);
+  assert.match(visual, /stateCaptures/);
+  assert.match(visual, /PUBLIC_LEAD_INTAKE_ENABLED:\s*"true"/);
+  assert.match(visual, /ensureWaitlistDist/);
   assert.match(gate, /VISUAL_ACCEPTED/);
   assert.match(template, /leasemate-preview:start/);
   assert.match(template, /visual-accepted/);

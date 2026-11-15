@@ -1,36 +1,28 @@
+@import "@singleton-sd/tokens/css/root/dark";
 @import "tailwindcss";
 
 /*
-  Token ids match @singleton-sd/tokens 1.5.0 (private GitLab package).
-  This repo inlines the hex fallbacks so CI needs no registry credential.
+  Primitive and role tokens come from @singleton-sd/tokens 1.7.0.
   LeaseMate semantic aliases (--lm-*) live in this file only.
+  Primary button labels stay black on gold (not text.on-brand / gray-900).
 */
 :root {
   color-scheme: dark;
-  --ssd-color-black: #000000;
-  --ssd-color-white: #ffffff;
-  --ssd-color-yellow-dark-500: #ffb300;
-  --ssd-color-yellow-light-500: #c89200;
-  --ssd-color-gray-300: #c9ccd1;
-  --ssd-color-gray-500: #9da1a6;
-  --ssd-color-gray-600: #7f848a;
-  --ssd-color-gray-900: #111111;
-
-  --lm-canvas: var(--ssd-color-black);
-  --lm-surface: var(--ssd-color-gray-900);
-  --lm-text: var(--ssd-color-white);
-  --lm-text-muted: var(--ssd-color-gray-500);
-  /* Dim text must clear WCAG AA (4.5:1) on black — #7F848A is ~4.4:1. */
-  --lm-text-dim: #8b9199;
+  --lm-canvas: var(--ssd-color-background-default);
+  --lm-surface: var(--ssd-color-background-muted);
+  --lm-text: var(--ssd-color-text-default);
+  --lm-text-muted: var(--ssd-color-text-muted);
+  --lm-text-dim: var(--ssd-color-text-muted);
   --lm-text-soft: var(--ssd-color-gray-300);
-  --lm-accent: var(--ssd-color-yellow-dark-500);
-  --lm-accent-hovered: #ffd54f;
+  --lm-accent: var(--ssd-color-background-brand);
+  --lm-accent-hovered: var(--ssd-color-background-brand-hovered);
+  --lm-accent-pressed: var(--ssd-color-background-brand-pressed);
   --lm-on-accent: var(--ssd-color-black);
-  --lm-border: #292c30;
-  --lm-focus: #ffd54f;
+  --lm-border: var(--ssd-color-border-default);
+  --lm-focus: var(--ssd-color-border-focus);
   --lm-font: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif;
-  --lm-radius-control: 8px;
-  --lm-radius-card: 16px;
+  --lm-radius-control: var(--ssd-radius-md);
+  --lm-radius-card: var(--ssd-radius-xl);
   --lm-shell-max: 1280px;
   --lm-space-section: clamp(4rem, 8vw, 7rem);
 }
@@ -40,15 +32,22 @@
 }
 
 html {
+  height: 100%;
+  min-height: 100%;
   background: var(--lm-canvas);
   color: var(--lm-text);
   font-family: var(--lm-font);
+  font-weight: var(--ssd-font-weight-regular);
   scroll-behavior: smooth;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--lm-canvas);
 }
 
@@ -60,6 +59,7 @@ h1,
 h2,
 h3 {
   margin: 0;
+  font-weight: var(--ssd-font-weight-bold);
   letter-spacing: -0.045em;
 }
 
@@ -81,8 +81,8 @@ textarea {
 }
 
 :focus-visible {
-  outline: 3px solid var(--lm-focus);
-  outline-offset: 4px;
+  outline: var(--ssd-border-width-strong) solid var(--lm-focus);
+  outline-offset: var(--ssd-border-width-focus-offset);
 }
 
 .shell {
@@ -209,6 +209,7 @@ textarea {
 }
 
 main {
+  flex: 1 0 auto;
   overflow: clip;
 }
 
@@ -228,7 +229,7 @@ main {
   margin-top: 1rem;
   color: var(--lm-text-muted);
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: var(--ssd-font-weight-regular);
   line-height: 1.6;
 }
 
@@ -238,10 +239,10 @@ main {
   gap: 2rem;
 }
 
-.site-footer__column h2 {
-  margin-bottom: 1rem;
+.site-footer__heading {
+  margin: 0 0 1rem;
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: var(--ssd-font-weight-medium);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--lm-text-dim);
@@ -255,6 +256,9 @@ main {
 }
 
 .site-footer__column a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   font-size: 0.875rem;
   color: var(--lm-text-soft);
   text-decoration: none;
@@ -283,6 +287,9 @@ main {
 
 .site-footer__policy-links a,
 .site-footer__credit {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: var(--lm-text-dim);
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -316,6 +323,13 @@ main {
 .button-link--primary:hover {
   background: var(--lm-accent-hovered);
   border-color: var(--lm-accent-hovered);
+  color: var(--lm-on-accent);
+}
+
+.button-link--primary:active {
+  background: var(--lm-accent-pressed);
+  border-color: var(--lm-accent-pressed);
+  color: var(--lm-on-accent);
 }
 
 .button-link--secondary {
@@ -355,11 +369,16 @@ main {
   padding-block: var(--lm-space-section);
 }
 
+.shell:has(.page-hero) + .band,
+.shell:has(.page-hero) + .cta-band {
+  padding-block-start: 0;
+}
+
 .page-hero h1,
 .section-heading h2 {
   margin-top: 1rem;
   font-size: clamp(2.5rem, 6vw, 3.5rem);
-  font-weight: 500;
+  font-weight: var(--ssd-font-weight-bold);
   line-height: 1.05;
 }
 
@@ -375,7 +394,7 @@ main {
   margin-top: 1.25rem;
   color: var(--lm-text-muted);
   font-size: 1.05rem;
-  font-weight: 300;
+  font-weight: var(--ssd-font-weight-regular);
   line-height: 1.7;
 }
 
@@ -394,6 +413,7 @@ main {
 
 .legal-section h1 {
   font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: var(--ssd-font-weight-bold);
 }
 
 .legal-effective {
@@ -408,7 +428,7 @@ main {
 
 .cta-band h2 {
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 500;
+  font-weight: var(--ssd-font-weight-bold);
   line-height: 1.1;
 }
 
@@ -433,9 +453,9 @@ main {
   padding: clamp(1.5rem, 4vw, 2.25rem);
 }
 
-.feature-item h3 {
+.feature-item h2 {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--ssd-font-weight-bold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -443,7 +463,7 @@ main {
 .feature-item p {
   margin-top: 0.75rem;
   color: var(--lm-text-muted);
-  font-weight: 300;
+  font-weight: var(--ssd-font-weight-regular);
   line-height: 1.65;
 }
 
@@ -500,8 +520,9 @@ main {
 }
 
 .field-control:focus {
-  border-color: var(--lm-accent);
-  outline: none;
+  border-color: var(--lm-focus);
+  outline: var(--ssd-border-width-strong) solid var(--lm-focus);
+  outline-offset: var(--ssd-border-width-focus-offset);
 }
 
 .contact-form {
@@ -556,13 +577,13 @@ main {
 
 .contact-form__success h2 {
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: var(--ssd-font-weight-bold);
 }
 
 .contact-form__success p {
   margin-top: 0.75rem;
   color: var(--lm-text-muted);
-  font-weight: 300;
+  font-weight: var(--ssd-font-weight-regular);
   line-height: 1.6;
 }
 
@@ -593,7 +614,14 @@ main {
 
   .site-header__links {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .site-header__links a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
   }
 
   .site-footer__top,

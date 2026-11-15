@@ -67,6 +67,16 @@ test("pricing page is clearly a placeholder", async () => {
   assert.doesNotMatch(content, /self-serve billing/);
 });
 
+test("404 uses the shared page hero heading", async () => {
+  const page = await readFile(
+    new URL("../src/pages/404.astro", import.meta.url),
+    "utf8",
+  );
+  assert.match(page, /PageHero/);
+  assert.match(page, /Page not found/);
+  assert.match(page, /eyebrow="404"/);
+});
+
 test("privacy and terms stubs say coming soon", async () => {
   const privacy = await readFile(privacyPath, "utf8");
   const terms = await readFile(termsPath, "utf8");

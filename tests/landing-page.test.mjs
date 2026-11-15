@@ -17,8 +17,13 @@ test("features page renders the feature grid from CMS", async () => {
     new URL("src/pages/features.astro", root),
     "utf8",
   );
+  const item = await readFile(
+    new URL("src/components/FeatureItem.astro", root),
+    "utf8",
+  );
   assert.match(page, /FeatureGrid/);
   assert.match(page, /FeatureItem/);
+  assert.match(item, /<h2>\{title\}<\/h2>/);
 });
 
 test("pricing page marks placeholder content", async () => {

@@ -6,14 +6,25 @@ import { pathToFileURL } from "node:url";
 const root = new URL("../", import.meta.url);
 
 test("design tokens match LeaseMate dark-first branding", async () => {
+  const pkg = await readFile(new URL("package.json", root), "utf8");
   const styles = await readFile(new URL("src/styles/global.css", root), "utf8");
-  assert.match(styles, /--ssd-color-yellow-dark-500:\s*#ffb300/);
-  assert.match(styles, /--ssd-color-black:\s*#000000/);
-  assert.match(styles, /--lm-canvas:\s*var\(--ssd-color-black\)/);
-  assert.match(styles, /--lm-accent:\s*var\(--ssd-color-yellow-dark-500\)/);
+  assert.match(pkg, /"@singleton-sd\/tokens":\s*"1\.7\.0"/);
+  assert.match(styles, /@import "@singleton-sd\/tokens\/css\/root\/dark"/);
+  assert.match(styles, /--lm-canvas:\s*var\(--ssd-color-background-default\)/);
+  assert.match(styles, /--lm-surface:\s*var\(--ssd-color-background-muted\)/);
+  assert.match(styles, /--lm-text:\s*var\(--ssd-color-text-default\)/);
+  assert.match(styles, /--lm-text-muted:\s*var\(--ssd-color-text-muted\)/);
+  assert.match(styles, /--lm-border:\s*var\(--ssd-color-border-default\)/);
+  assert.match(styles, /--lm-focus:\s*var\(--ssd-color-border-focus\)/);
+  assert.match(
+    styles,
+    /--lm-accent-pressed:\s*var\(--ssd-color-background-brand-pressed\)/,
+  );
   assert.match(styles, /--lm-on-accent:\s*var\(--ssd-color-black\)/);
   assert.match(styles, /color-scheme:\s*dark/);
-  assert.match(styles, /--lm-text-dim:\s*#8b9199/);
+  assert.doesNotMatch(styles, /--ssd-color-gray-900:\s*#111111/);
+  assert.doesNotMatch(styles, /outline:\s*none/);
+  assert.doesNotMatch(styles, /font-weight:\s*300/);
 });
 
 test("approved font is self-hosted Plus Jakarta Sans", async () => {
@@ -56,6 +67,7 @@ test("header and footer expose the LeaseMate IA", async () => {
   assert.match(header, /Join waitlist/);
   assert.match(header, /aria-current=\{/);
   assert.match(footer, /aria-label="Footer"/);
+  assert.match(footer, /site-footer__heading/);
   assert.match(footer, /house owners and lease holders in Victoria/);
   assert.match(footer, /© 2026 LeaseMate/);
 

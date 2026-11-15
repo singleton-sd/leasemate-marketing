@@ -28,6 +28,7 @@
     "@astrojs/react": "^6.0.2",
     "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
     "@hookform/resolvers": "^5.9.1",
+    "@singleton-sd/tokens": "1.7.0",
     "astro": "^7.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

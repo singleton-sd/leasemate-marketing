@@ -24,10 +24,10 @@ Run the full local quality gate with `pnpm verify`.
 - Decap CMS at `/admin/`
 - GitHub Pages at `leasemate.singletonsd.com`
 
-The shared `@singleton-sd/tokens` package is hosted in a private registry.
-This repository therefore keeps the matching CSS variables in
-`src/styles/global.css` so installs and CI need no registry credential.
-LeaseMate aliases (`--lm-*`) are defined in that same file.
+The shared `@singleton-sd/tokens` 1.7.0 package is installed from the
+GitLab npm registry (`@singleton-sd` scope in `.npmrc`). LeaseMate aliases
+(`--lm-*`) in `src/styles/global.css` map to those token roles. Primary
+button labels stay black on gold.
 
 Logos in `public/` are copied from
 [`leasemate-assets`](https://github.com/singleton-sd/leasemate-assets)

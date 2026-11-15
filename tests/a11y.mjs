@@ -16,6 +16,16 @@ if (!existsSync(distDir)) {
   );
 }
 
+const ROUTES = [
+  "/",
+  "/features/",
+  "/pricing/",
+  "/contact/",
+  "/privacy/",
+  "/terms/",
+  "/missing-page-for-404",
+];
+
 function contentTypeForPath(pathname) {
   if (pathname.endsWith(".html")) return "text/html; charset=utf-8";
   if (pathname.endsWith(".css")) return "text/css; charset=utf-8";
@@ -57,9 +67,15 @@ const server = http.createServer(async (req, res) => {
     }
 
     const { pathname, fsPath } = resolveFsPath(req.url);
+    const notFoundPath = `${distDir}/404.html`;
 
-    // For non-existent assets, return 404 (do not fall through to index).
     if (!existsSync(fsPath) || statSync(fsPath).isDirectory()) {
+      if (existsSync(notFoundPath)) {
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.end(await readFile(notFoundPath));
+        return;
+      }
       res.statusCode = 404;
       res.end("Not found");
       return;
@@ -67,7 +83,6 @@ const server = http.createServer(async (req, res) => {
 
     res.setHeader("Content-Type", contentTypeForPath(pathname));
 
-    // Serve text-based files in one go for simplicity.
     if (
       pathname.endsWith(".html") ||
       pathname.endsWith(".css") ||
@@ -102,29 +117,32 @@ const context = await browser.newContext({
 const page = await context.newPage();
 
 try {
+  for (const route of ROUTES) {
+    await page.goto(`${baseUrl}${route}`, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle");
+
+    const axeResults = await new AxeBuilder({ page }).analyze();
+    const violations = axeResults.violations ?? [];
+    const severe = violations.filter(
+      (v) => v.impact === "critical" || v.impact === "serious",
+    );
+
+    if (severe.length > 0) {
+      console.log(
+        `Accessibility violations on ${route} (impact critical/serious):\n` +
+          severe
+            .map((v) => `- ${v.impact}: ${v.id} (${v.nodes.length} nodes)`)
+            .join("\n"),
+      );
+      throw new Error(
+        `Accessibility scan failed on ${route}: ${severe.length} critical/serious violation(s).`,
+      );
+    }
+  }
+
   await page.goto(`${baseUrl}/`, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle");
 
-  // 1) Axe accessibility scan: fail on serious/critical only.
-  const axeResults = await new AxeBuilder({ page }).analyze();
-  const violations = axeResults.violations ?? [];
-  const severe = violations.filter(
-    (v) => v.impact === "critical" || v.impact === "serious",
-  );
-
-  if (severe.length > 0) {
-    console.log(
-      "Accessibility violations (impact critical/serious):\n" +
-        severe
-          .map((v) => `- ${v.impact}: ${v.id} (${v.nodes.length} nodes)`)
-          .join("\n"),
-    );
-    throw new Error(
-      `Accessibility scan failed: ${severe.length} critical/serious violation(s).`,
-    );
-  }
-
-  // 2) Keyboard-only reachability + activation for every focusable interactive element.
   const interactiveHrefs = await page.evaluate(() => {
     const selector =
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -140,7 +158,6 @@ try {
 
   const uniqueHrefs = Array.from(new Set(interactiveHrefs));
 
-  // Ensure we have at least the expected “skip link + main anchors”.
   assert.ok(
     uniqueHrefs.length >= 4,
     `Expected at least 4 unique interactive hrefs, got ${uniqueHrefs.length}`,
@@ -167,8 +184,6 @@ try {
     ).join(", ")}, but reached ${Array.from(visited).join(", ")}.`,
   );
 
-  // Activate in-page anchors via Enter. Cross-page links are already proven
-  // focusable above; following them here would destroy the page context.
   for (const href of uniqueHrefs) {
     if (!href.startsWith("#")) continue;
 
@@ -183,7 +198,7 @@ try {
     });
   }
 
-  console.log("Accessibility checks passed");
+  console.log(`Accessibility checks passed for ${ROUTES.length} routes`);
 } finally {
   await context.close();
   await browser.close();
