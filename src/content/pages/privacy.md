@@ -6,7 +6,7 @@ updated: "23 November 2026 (draft)"
 draft: true
 ---
 
-> **Draft for legal review.** This document is being reviewed by a Victorian tenancy lawyer and is not yet in force. Items marked PLACEHOLDER are still to be confirmed.
+> **DRAFT — not in force — published for legal review only.** This document is being reviewed by a Victorian tenancy lawyer and is not yet in force. Items marked PLACEHOLDER are still to be confirmed.
 
 # LeaseMate Privacy Policy
 
@@ -20,7 +20,7 @@ LeaseMate is an online service for managing house and room leases. It is provide
 - Email: support@leasemate.singletonsd.com
 - Phone: [PLACEHOLDER: contact phone]
 
-We are based in Victoria, Australia. This policy explains how we handle personal information under the *Privacy Act 1988* (Cth) and the Australian Privacy Principles (**APPs**).
+We are based in Victoria, Australia. This policy explains how we handle personal information under the *Privacy Act 1988* (Cth) and the Australian Privacy Principles (**APPs**). Singleton may be a small business under the Privacy Act, but we have chosen to comply with the Australian Privacy Principles.
 
 ## 2. Who this policy applies to
 
@@ -28,19 +28,19 @@ LeaseMate is used by:
 
 - **Customers**: house owners (landlords) and lease holders (head tenants who sublet) who sign up to LeaseMate.
 - **Customer users**: the customer and the people the customer invites, such as admins, house managers (often outside real estate agents) and viewers.
-- **Leads and tenants**: people who enquire about, apply for, inspect or rent a property, room or bed managed by a customer through LeaseMate.
+- **Leads and tenants**: people who enquire about, apply for, inspect or rent a property or room managed by a customer through LeaseMate.
 - **Visitors**: people who visit our website or contact our support team.
 
 ## 3. Our role: who is responsible for what
 
 - **Customer users' account information.** We decide how this information is handled and we are responsible for it under this policy.
-- **Lead, applicant and tenant information.** The customer (the landlord or head tenant) is the **controller** of this information: they decide what to collect and how to use it, and they are responsible for their own privacy obligations to their renters, including telling them how their information is handled. Singleton is a **processor**: we store and process that information on the customer's behalf, and only to provide LeaseMate to that customer.
+- **Lead, applicant and tenant information.** The customer decides what renter information to collect and how it is used, and is responsible for their own privacy obligations to their renters, including telling them how their information is handled. Singleton handles that information on the customer's behalf and following the customer's instructions, and only to provide LeaseMate to that customer. Singleton still meets its own obligations under the Privacy Act for information it holds, including security, access and correction requests, and data breach notification.
 
 If you are a lead, applicant or tenant and have a question about your information, or you want it corrected or deleted, please contact the landlord, lease holder or agent you dealt with first. We will help them respond.
 
-If you send a deletion or other privacy request to us directly, we will log it and pass it to that customer within 2 business days, and we will tell you who the customer is. You can also contact us about our handling of information (see section 13).
+If you send a deletion or other privacy request to us directly, we will log it and pass it to that customer within 2 business days, and we will tell you who the customer is. If the customer does not respond, or the information is information Singleton holds for its own purposes, we will respond to your access or correction request ourselves within a reasonable time (usually 30 days). We do not charge for correction requests. You can also contact us about our handling of information (see section 13).
 
-**Deleting your own LeaseMate account** removes only your login and profile. It does not remove records a customer holds about you (for example as a renter or applicant, or as a user of that customer's account). To ask for those records to be deleted, contact the customer, or contact us and we will pass the request on as described above.
+**Deleting your own LeaseMate account** removes only your login and profile. It does not remove records a customer holds about you (for example as a renter or applicant, or as a user of that customer's account). To ask for those records to be deleted, contact the customer, or contact us and we will pass the request on as described above. A customer cannot delete a person's records while those records are on a legal hold or part of an open dispute (see section 11).
 
 ## 4. Personal information we collect
 
@@ -56,16 +56,19 @@ If you send a deletion or other privacy request to us directly, we will log it a
 ### 4.2 Leads and tenants (collected for and on behalf of our customers)
 
 - Contact details, such as name, email address and phone number.
-- Rental details, such as the property, room or bed, move-in and move-out dates, rent, bond and deposit details, and inspection bookings.
-- Contract contents, including room or bed flatmate agreements and whole-house leases (Consumer Affairs Victoria Form 1), and electronic signatures.
-- **Identity documents** (such as passport or ID scans). These are collected only once a lead becomes a tenant. See section 7 for how we protect them.
-- Any other information a customer chooses to record.
+- Rental details, such as the property or room, move-in and move-out dates, rent, bond and deposit details, and inspection bookings.
+- Contract contents, including room flatmate agreements and whole-house leases (Consumer Affairs Victoria Form 1), and electronic signatures.
+- **Applications.** Applications to rent a Victorian property are made using the prescribed rental application form (Form 3A). Customers may only ask for information the form allows, and may ask for no more than two identity documents from the list on that form.
+- **Identity documents:** no more than two from the Form 3A list (for example a passport, a driver licence, a government-issued proof of age card, a foreign passport with an Australian visa, or a tertiary student ID).
+- Notes needed to manage the tenancy (not extra application questions).
 
 ### 4.3 Website visitors
 
 - Information you submit through forms on our website (for example, joining a waitlist or contacting us).
 - Information collected by Cloudflare Turnstile to check that a form is being submitted by a person and not a bot.
 - [PLACEHOLDER: analytics or cookies used on the marketing site, if any]
+
+If you join our waitlist or opt in, we may email you about LeaseMate. Every marketing email has an unsubscribe link; we action unsubscribe requests within 5 working days. We never use lead or tenant information for marketing.
 
 We do not intentionally collect sensitive information (such as health or racial information). Please do not include it in LeaseMate unless the law requires it.
 
@@ -76,14 +79,16 @@ We collect personal information:
 - directly from you, when you sign up, sign in, use LeaseMate, fill in a form or contact support;
 - from Google or Microsoft, when you choose to sign in with them;
 - from our customers and their users, when they enter lead and tenant information; and
-- from leads and tenants, when they complete forms, upload documents or sign contracts sent through LeaseMate.
+- from leads and tenants, when they open an offer link, complete an application, upload documents or sign contracts sent through LeaseMate.
+
+Before a renter submits information through an offer link, LeaseMate shows them a collection notice and asks for their consent.
 
 ## 6. How we use personal information
 
 We use personal information to:
 
 - create and manage accounts and let users sign in securely;
-- provide LeaseMate's features, including managing properties, rooms, beds, leads, inspections, deposits and contracts;
+- provide LeaseMate's features, including managing properties, rooms, leads, inspections, deposits and contracts;
 - prepare documents and send them for electronic signature;
 - send service emails, such as sign-in codes, invitations, signature requests and notifications;
 - provide support;
@@ -93,20 +98,27 @@ We use personal information to:
 
 We do not sell personal information, and we do not use lead or tenant information for our own marketing.
 
+Customers in Victoria may only use applicant information to assess an applicant's suitability to rent the property or to meet the *Residential Tenancies Act 1997* (Vic). LeaseMate is designed around that limit.
+
 ### 6.1 Google and Microsoft sign-in
 
 When you sign in with Google or Microsoft, LeaseMate asks only for your basic profile and email address. We use this information only to sign you in and identify your account.
 
 LeaseMate's use and transfer of information received from Google APIs follows the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements. We do not sell Google user data, use it for advertising, or use it for any purpose other than signing you in to LeaseMate.
 
+### 6.2 Decisions made with computer programs
+
+LeaseMate does not make automated decisions about applicants. It does not rank, filter, auto-reject or auto-verify identity documents. Customers make all decisions about applications and tenancies.
+
 ## 7. Identity documents
 
 Identity and passport scans get extra protection:
 
-- They are collected only once a lead becomes a tenant, not during the application or enquiry stage.
+- Customers may collect no more than two identity documents, and only from the Form 3A list, as part of a rental application.
 - Only the customer's **owners and admins** can view them. House managers and other users only see whether ID has been verified.
 - Every view is recorded in an audit log.
-- They are deleted automatically **12 months after the tenant moves out**, or **30 days after an application is rejected**. They are never placed on a legal hold. If a person is deleted from a customer's account, or a customer account is deleted after its grace period, ID scans are deleted at once. In all of these cases they are removed from LeaseMate's live systems at that point, and from our backups as those backups are automatically deleted, which takes up to 35 days (see section 11).
+- Customers must not charge a renter or applicant for an identity check.
+- **Deletion.** ID documents of a tenant are deleted 12 months after the tenant moves out. For applicants who are not chosen, ID documents and the whole application are deleted 30 days after the agreement for that property or room is signed, or 30 days after the application is declined, whichever is earlier (up to 6 months if the applicant agrees in writing that the customer may consider them for other properties). Identity documents are never placed on a legal hold. If a person is deleted from a customer's account (where deletion is allowed — see section 11), or a customer account is deleted after its grace period, remaining ID scans are deleted at once. In all of these cases they are removed from LeaseMate's live systems at that point, and from our backups as those backups are automatically deleted, which takes up to 35 days (see section 11).
 
 ## 8. Disclosure of personal information
 
@@ -162,12 +174,24 @@ No system is completely secure, but we work to keep LeaseMate safe and act quick
 
 ## 11. How long we keep personal information
 
-- **ID documents, applications and contact details:** ID documents follow the timetable in section 7. Applications and contact details are never placed on a legal hold. When a person is deleted from a customer's account, or a customer account is deleted after its grace period, ID scans, applications and contact details are deleted at once (and then removed from backups as described below).
-- **Legal holds.** Some tenancy records may have to be kept even if other information about a person is deleted. Until a Victorian tenancy lawyer and the Accountant confirm the required periods, we keep the following records for **7 years from the end of the tenancy**: signed tenancy agreements, bond lodgement records, and rent and holding-deposit payment records. These records stay encrypted. Only that customer's **owners and admins** can see them; house managers cannot. **30 days before** the hold ends and these records are deleted, we prompt the customer's owners and admins to export them. When the hold ends, the records are deleted.
-- **Owner summary (interim, pending lawyer review).** After those held records are deleted, LeaseMate keeps a small summary of the tenancy for the customer: the property, the tenancy start and end dates, and the rent. It has no renter names, contact details or ID. Only that customer's owners and admins can see it. It is kept until the customer's account is deleted, and it is included in whole-customer deletion. We keep it because owners may need proof of rental periods for capital gains tax until 5 years after they sell the property. This retention is interim and awaits the lawyer's review.
-- **Customer account and other lead/tenant information:** kept while the customer's account is active. If the whole customer account is closed, there is a **7-day grace period** during which the closure can be cancelled and an export of the customer's data is offered. When that period ends, we delete the customer's data from LeaseMate's live systems, including any owner summaries, except records that are on a legal hold as described above.
-- **Deleting one person from a customer's account.** Only an owner or admin can do this. It happens straight after a two-step confirmation, and the action is audited. ID scans, applications and contact details are deleted at once; records on a legal hold are kept as described above. We do not restore that person's deleted information from backups.
-- **Signed contracts** that are not on a legal hold are kept for as long as the customer keeps them in LeaseMate, subject to the rules above. [PLACEHOLDER: confirm whether audit logs have a minimum or maximum retention period beyond the 30-day log period below]
+Victorian law requires identified renter information to be destroyed or permanently de-identified within 3 years after a tenancy ends, unless a law or a court or tribunal order requires it to be kept, or the renter has agreed in writing (*Residential Tenancies Act 1997* (Vic) s 505BC).
+
+- **ID documents, applications and contact details:** ID documents and unsuccessful applications follow the timetable in section 7. Applications and contact details are never placed on a legal hold, subject to the holds below where they form part of a tax, dispute, court or consent record. When a person is deleted from a customer's account (where deletion is allowed), or a customer account is deleted after its grace period, ID scans, applications and contact details that are not on a hold are deleted at once (and then removed from backups as described below). In any case, identified renter information is destroyed or de-identified 3 years after the tenancy ends (30 days for unsuccessful applicants, or up to 6 months with the applicant's written consent), as above.
+- **Legal holds.** Some tenancy records may have to be kept even if other information about a person is deleted. LeaseMate keeps identified tenancy records for up to 3 years after a tenancy ends, then de-identifies them, except where a specific hold applies:
+  - **RTA_RENT_RECORD:** rent payment records, kept for at least 12 months.
+  - **RTA_DEFAULT_MAX:** identified renter data, destroyed or de-identified 3 years after the tenancy ends. This cap also applies to all other lead and tenant data, except where one of the holds below applies.
+  - **TAX_RECORD:** records kept for tax, retained until 7 years after the tenancy ends, in de-identified form. Identified records are kept only if the owner confirms they are needed for tax.
+  - **DISPUTE_OR_PROCEEDING:** records relevant to a dispute or VCAT or court proceeding, until it is resolved.
+  - **COURT_ORDER:** records a court or tribunal orders us to keep, for as long as the order requires.
+  - **RENTER_CONSENT:** records the renter has agreed in writing may be kept, for the period they agreed.
+
+  Held records stay encrypted. Only that customer's **owners and admins** can see held records; house managers cannot. The owner summary (below) is visible only to owners. **30 days before** a hold ends and records are deleted or de-identified, we prompt the customer's owners and admins to export them.
+
+- **Owner summary.** After held records are deleted or de-identified, LeaseMate may keep a small summary of the tenancy: the property, the tenancy start and end dates, and the rent. It has no renter names, contact details or ID. Only that customer's **owners** can see it, not admins, house managers or lease holders. It is deleted 5 years after the owner records the property as sold. We prompt the owner to export it 30 days before that deletion. If no sale is recorded, we ask the owner every 5 years whether the property has been sold. The summary is also included in whole-customer deletion.
+- **Customer account and other lead/tenant information:** kept while the customer's account is active, and in any case renter information is destroyed or de-identified 3 years after the tenancy ends (30 days for unsuccessful applicants, or up to 6 months with written consent), as above. If the whole customer account is closed, there is a **7-day grace period** during which the closure can be cancelled and an export of the customer's data is offered. When that period ends, we delete the customer's data from LeaseMate's live systems, including any owner summaries, except records that are on a legal hold as described above.
+- **Deleting one person from a customer's account.** Only an owner or admin can do this. Deletion is blocked while any of that person's records are on a legal hold or part of an open dispute. Where deletion is allowed, it happens straight after a two-step confirmation, and the action is audited. ID scans, applications and contact details are deleted at once; records on a legal hold are kept as described above. We do not restore that person's deleted information from backups.
+- **Signed contracts** that are not on a legal hold are kept for as long as the customer keeps them in LeaseMate, subject to the 3-year cap and the rules above.
+- **Audit logs** of actions in LeaseMate are kept for as long as the related record, subject to the same maximums.
 - **Support chats:** [PLACEHOLDER: support chat retention period]
 - **Logs:** we keep operational and system logs for 30 days.
 - **Backups:** we keep encrypted backups so we can restore LeaseMate if something goes wrong. We do not use them for anything else. Daily backups are kept for 35 days. After that they are deleted automatically and permanently, without going to a trash folder.
@@ -178,7 +202,7 @@ No system is completely secure, but we work to keep LeaseMate safe and act quick
 
 You can ask for access to the personal information we hold about you, or ask us to correct it. Customer users can update most of their details in LeaseMate. For anything else, email support@leasemate.singletonsd.com.
 
-If you are a lead, applicant or tenant, please contact the customer (landlord, lease holder or agent) first, as they control your information. If you contact us instead, we will log the request, pass it to that customer within 2 business days, and tell you who the customer is. We will also help the customer respond.
+If you are a lead, applicant or tenant, please contact the customer (landlord, lease holder or agent) first. If you contact us instead, we will log the request, pass it to that customer within 2 business days, and tell you who the customer is. We will also help the customer respond. If the customer does not respond, or the information is information Singleton holds for its own purposes, we will respond to your access or correction request ourselves within a reasonable time (usually 30 days). We do not charge for correction requests.
 
 We will respond within a reasonable time, usually within 30 days. We may need to confirm your identity first. If we refuse a request, we will tell you why and how to complain.
 
@@ -198,7 +222,7 @@ If you are not satisfied with our response, you can complain to the **Office of 
 
 ## 14. Data breaches
 
-If we become aware of a data breach involving personal information, we will act quickly to contain it and assess the risk. If it is an eligible data breach under the Notifiable Data Breaches scheme in the *Privacy Act 1988*, we will notify affected people and the OAIC as required. Where a breach affects lead or tenant information, we will also notify the affected customer promptly so they can meet their own obligations.
+If we become aware of a data breach involving personal information, we will act quickly to contain it and assess the risk. We assess suspected breaches promptly and notify the OAIC and affected individuals as required by the Notifiable Data Breaches scheme in the *Privacy Act 1988*. Where a breach affects lead or tenant information, we will also notify the affected customer promptly so they can meet their own obligations.
 
 ## 15. Changes to this policy
 
