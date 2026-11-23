@@ -28,3 +28,41 @@ test("getNamedMetaContent requires name=description, not og:description", () => 
   const both = `${ogOnly}<meta name="description" content="${description}">`;
   assert.equal(getNamedMetaContent(both, "description"), description);
 });
+
+test("getNamedMetaContent ignores data-name and data-content", () => {
+  assert.equal(
+    getNamedMetaContent(
+      `<meta data-name="description" content="Draft">`,
+      "description",
+    ),
+    undefined,
+  );
+  assert.equal(
+    getNamedMetaContent(
+      `<meta name="description" data-content="Draft">`,
+      "description",
+    ),
+    undefined,
+  );
+  assert.equal(
+    getNamedMetaContent(
+      `<meta foo="name=description" content="Draft">`,
+      "description",
+    ),
+    undefined,
+  );
+  assert.equal(
+    getNamedMetaContent(
+      `<meta name="description" content="Draft (legal review).">`,
+      "description",
+    ),
+    "Draft (legal review).",
+  );
+  assert.equal(
+    getNamedMetaContent(
+      `<meta name='description' content='Quoted'>`,
+      "description",
+    ),
+    "Quoted",
+  );
+});

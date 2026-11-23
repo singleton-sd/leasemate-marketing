@@ -19,18 +19,30 @@ function decodeHtmlEntities(value) {
 }
 
 /**
+ * Read HTML attributes as complete names outside quoted values.
+ * `data-name` is not `name`; `name="…"` inside another attribute's value is ignored.
+ */
+function readAttributes(tag) {
+  const body = tag.replace(/^<\s*meta\b/i, "").replace(/\/?>$/i, "");
+  const attrs = new Map();
+  const attrPattern =
+    /([^\s=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+  for (const match of body.matchAll(attrPattern)) {
+    attrs.set(match[1].toLowerCase(), match[2] ?? match[3] ?? match[4] ?? "");
+  }
+  return attrs;
+}
+
+/**
  * Return the decoded content of `<meta name="{name}">`, ignoring
  * `property="og:description"` and other meta tags.
  */
 export function getNamedMetaContent(html, name) {
   for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
-    const tag = match[0];
-    const nameMatch = tag.match(/\bname\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
-    const attrName = nameMatch?.[1] ?? nameMatch?.[2];
-    if (attrName !== name) continue;
-    const contentMatch = tag.match(/\bcontent\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
-    if (!contentMatch) return undefined;
-    return decodeHtmlEntities(contentMatch[1] ?? contentMatch[2] ?? "");
+    const attrs = readAttributes(match[0]);
+    if (attrs.get("name") !== name) continue;
+    if (!attrs.has("content")) return undefined;
+    return decodeHtmlEntities(attrs.get("content") ?? "");
   }
   return undefined;
 }
