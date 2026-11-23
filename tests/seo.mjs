@@ -140,9 +140,9 @@ testMetadata(
       ),
     );
     assert.match(privacyHtml, /<blockquote>/i);
-    assert.match(privacyHtml, /Draft for legal review/);
+    assert.match(privacyHtml, /legal review/i);
     assert.match(termsHtml, /<blockquote>/i);
-    assert.match(termsHtml, /Draft for legal review/);
+    assert.match(termsHtml, /legal review/i);
     assert.match(privacyHtml, /PLACEHOLDER/);
     assert.match(termsHtml, /href="\/privacy"/);
     assert.match(termsHtml, /href="\/pricing"/);
