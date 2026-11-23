@@ -99,9 +99,9 @@ function createStaticServer(root) {
   });
 }
 
-function listen(server) {
+function listen(server, preferredPort = 0) {
   return new Promise((resolve) => {
-    server.listen(port, "127.0.0.1", () => {
+    server.listen(preferredPort, "127.0.0.1", () => {
       const address = server.address();
       assert.ok(
         address && typeof address === "object" && address.port > 0,
@@ -137,7 +137,7 @@ function ensureLeadFormsDist() {
 
 const leadOnDist = ensureLeadFormsDist();
 const leadOnServer = createStaticServer(leadOnDist);
-const leadOnPort = await listen(leadOnServer);
+const leadOnPort = await listen(leadOnServer, port);
 const origin = `http://127.0.0.1:${leadOnPort}`;
 
 const browser = await chromium.launch();
