@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import { getNamedMetaContent } from "./seo-helpers.mjs";
+
 const repoRoot = new URL("..", import.meta.url);
 const distDir = new URL("dist/", repoRoot);
 
@@ -125,20 +127,21 @@ testMetadata(
       termsHtml,
       /<meta name="robots" content="noindex,follow"\s*\/?>/i,
     );
-    assert.match(
+    const privacyMetaDescription = getNamedMetaContent(
       privacyHtml,
-      new RegExp(
-        `content="${privacyDescription.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}"`,
-        "i",
-      ),
+      "description",
     );
-    assert.match(
-      termsHtml,
-      new RegExp(
-        `content="${termsDescription.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}"`,
-        "i",
-      ),
+    const termsMetaDescription = getNamedMetaContent(termsHtml, "description");
+    assert.ok(
+      privacyMetaDescription,
+      'privacy page is missing <meta name="description">',
     );
+    assert.ok(
+      termsMetaDescription,
+      'terms page is missing <meta name="description">',
+    );
+    assert.equal(privacyMetaDescription, privacyDescription);
+    assert.equal(termsMetaDescription, termsDescription);
     assert.match(privacyHtml, /<blockquote>/i);
     assert.match(privacyHtml, /legal review/i);
     assert.match(termsHtml, /<blockquote>/i);
