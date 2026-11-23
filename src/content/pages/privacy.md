@@ -1,7 +1,9 @@
 ---
+template: privacy
 title: "Privacy Policy"
 description: "How LeaseMate collects, uses, stores and protects personal information."
 updated: "23 November 2026 (draft)"
+draft: true
 ---
 
 > **Draft for legal review.** This document is being reviewed by a Victorian tenancy lawyer and is not yet in force. Items marked PLACEHOLDER are still to be confirmed.

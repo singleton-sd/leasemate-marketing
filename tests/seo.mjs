@@ -12,6 +12,10 @@ const robotsTxtPath = new URL("robots.txt", distDir);
 const sitemapXmlPath = new URL("sitemap.xml", distDir);
 const ogImagePath = new URL("og-image.png", distDir);
 const contactHtmlPath = new URL("contact/index.html", distDir);
+const privacyHtmlPath = new URL("privacy/index.html", distDir);
+const termsHtmlPath = new URL("terms/index.html", distDir);
+const privacyMdPath = new URL("src/content/pages/privacy.md", repoRoot);
+const termsMdPath = new URL("src/content/pages/terms.md", repoRoot);
 
 const homeMdPath = new URL("src/content/pages/home.md", repoRoot);
 
@@ -44,14 +48,42 @@ if (!existsSync(fileURLToPath(indexHtmlPath))) {
   );
 }
 
-const [indexHtml, notFoundHtml, robotsTxt, sitemapXml, contactHtml] =
-  await Promise.all([
-    readFile(indexHtmlPath, "utf8"),
-    readFile(notFoundHtmlPath, "utf8"),
-    readFile(robotsTxtPath, "utf8"),
-    readFile(sitemapXmlPath, "utf8"),
-    readFile(contactHtmlPath, "utf8"),
-  ]);
+const [
+  indexHtml,
+  notFoundHtml,
+  robotsTxt,
+  sitemapXml,
+  contactHtml,
+  privacyHtml,
+  termsHtml,
+  privacyMd,
+  termsMd,
+] = await Promise.all([
+  readFile(indexHtmlPath, "utf8"),
+  readFile(notFoundHtmlPath, "utf8"),
+  readFile(robotsTxtPath, "utf8"),
+  readFile(sitemapXmlPath, "utf8"),
+  readFile(contactHtmlPath, "utf8"),
+  readFile(privacyHtmlPath, "utf8"),
+  readFile(termsHtmlPath, "utf8"),
+  readFile(privacyMdPath, "utf8"),
+  readFile(termsMdPath, "utf8"),
+]);
+
+const privacyDescription = getTextBetween(
+  privacyMd,
+  /description:\s*/i,
+  /\nupdated:/i,
+)
+  .trim()
+  .replace(/^["']|["']$/g, "");
+const termsDescription = getTextBetween(
+  termsMd,
+  /description:\s*/i,
+  /\nupdated:/i,
+)
+  .trim()
+  .replace(/^["']|["']$/g, "");
 
 testMetadata("basic <title> + description", () => {
   assert.match(indexHtml, /<title>[^<]*LeaseMate[^<]*<\/title>/i);
@@ -81,6 +113,41 @@ testMetadata("404 is noindex", () => {
     /<meta name="robots" content="noindex,follow"\s*\/?>/i,
   );
 });
+
+testMetadata(
+  "draft legal pages are noindex and use frontmatter descriptions",
+  () => {
+    assert.match(
+      privacyHtml,
+      /<meta name="robots" content="noindex,follow"\s*\/?>/i,
+    );
+    assert.match(
+      termsHtml,
+      /<meta name="robots" content="noindex,follow"\s*\/?>/i,
+    );
+    assert.match(
+      privacyHtml,
+      new RegExp(
+        `content="${privacyDescription.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}"`,
+        "i",
+      ),
+    );
+    assert.match(
+      termsHtml,
+      new RegExp(
+        `content="${termsDescription.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}"`,
+        "i",
+      ),
+    );
+    assert.match(privacyHtml, /<blockquote>/i);
+    assert.match(privacyHtml, /Draft for legal review/);
+    assert.match(termsHtml, /<blockquote>/i);
+    assert.match(termsHtml, /Draft for legal review/);
+    assert.match(privacyHtml, /PLACEHOLDER/);
+    assert.match(termsHtml, /href="\/privacy"/);
+    assert.match(termsHtml, /href="\/pricing"/);
+  },
+);
 
 testMetadata("Open Graph and Twitter cards reference production domain", () => {
   assert.match(indexHtml, /property="og:title" content="[^"]*LeaseMate/i);
@@ -151,9 +218,13 @@ testMetadata("sitemap lists primary public routes", () => {
     sitemapXml,
     /<loc>https:\/\/leasemate\.singletonsd\.com\/features\/<\/loc>/,
   );
-  assert.match(
+  assert.doesNotMatch(
     sitemapXml,
     /<loc>https:\/\/leasemate\.singletonsd\.com\/privacy\/<\/loc>/,
+  );
+  assert.doesNotMatch(
+    sitemapXml,
+    /<loc>https:\/\/leasemate\.singletonsd\.com\/terms\/<\/loc>/,
   );
   assert.doesNotMatch(sitemapXml, /\/admin\//i);
 });

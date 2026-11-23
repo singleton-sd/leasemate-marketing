@@ -1,7 +1,9 @@
 ---
+template: terms
 title: "Terms of Service"
 description: "The terms that apply when you use LeaseMate."
 updated: "23 November 2026 (draft)"
+draft: true
 ---
 
 > **Draft for legal review.** This document is being reviewed by a Victorian tenancy lawyer and is not yet in force. Items marked PLACEHOLDER are still to be confirmed.
