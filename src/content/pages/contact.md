@@ -1,16 +1,16 @@
 ---
 template: contact
-title: Join the waitlist | LeaseMate
-description: Register your interest in LeaseMate and hear when early access opens.
-eyebrow: Waitlist
-headline: Join the LeaseMate waitlist.
-summary: Leave your details if you want to hear when LeaseMate is ready for early access.
+title: Contact | LeaseMate
+description: Send an enquiry about LeaseMate for house owners, lease holders, and agents.
+eyebrow: Contact
+headline: Talk to us about LeaseMate.
+summary: Tell us whether you are a house owner, a lease holder, or an agent. We follow up by email if your enquiry needs a response.
 status: Early access · a Singleton SD product
-submitLabel: Join waitlist
-successTitle: You're on the list.
-successBody: Thank you. We will email you when LeaseMate waitlist places open.
-openingSoonTitle: Waitlist opening soon
-openingSoonBody: The waitlist form is temporarily closed. Check back here soon.
+submitLabel: Send message
+successTitle: Message sent.
+successBody: Thank you. We will follow up by email if your enquiry needs a response.
+openingSoonTitle: Contact form opening soon
+openingSoonBody: The contact form is temporarily closed. Check back here soon.
 ---
 
-Register interest in LeaseMate.
+Send an enquiry about LeaseMate.

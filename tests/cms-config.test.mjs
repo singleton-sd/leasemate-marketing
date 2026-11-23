@@ -48,6 +48,7 @@ test("Decap pages collection is generated per page file", async () => {
   assert.match(config, /repo: singleton-sd\/leasemate-marketing/);
   assert.match(config, /file: src\/content\/pages\/home\.md/);
   assert.match(config, /file: src\/content\/pages\/contact\.md/);
+  assert.match(config, /file: src\/content\/pages\/waitlist\.md/);
   assert.match(config, /file: src\/content\/pages\/privacy\.md/);
   assert.match(config, /file: src\/content\/pages\/terms\.md/);
   assert.match(config, /name: template/);

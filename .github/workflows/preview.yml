@@ -77,6 +77,8 @@ jobs:
         run: pnpm playwright:install
       - name: Accessibility checks
         run: pnpm test:a11y
+      - name: Lead form Playwright checks
+        run: pnpm test:lead-forms
       - name: Capture visual screenshots
         run: pnpm test:visual
         env:
