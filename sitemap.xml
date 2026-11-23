@@ -16,12 +16,4 @@
     <loc>https://leasemate.singletonsd.com/pricing/</loc>
     <changefreq>monthly</changefreq>
   </url>
-  <url>
-    <loc>https://leasemate.singletonsd.com/privacy/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://leasemate.singletonsd.com/terms/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
 </urlset>
