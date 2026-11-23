@@ -19,5 +19,6 @@ key is public config and may be committed as an Actions variable name only.
 
 Keep public copy conservative. Do not claim unvalidated scale, performance,
 revenue, or launch dates. Pricing stays a labelled placeholder until the
-product owner publishes it. Privacy and terms stay “coming soon” until the
-product owner supplies the text.
+product owner publishes it. Privacy and terms are published as drafts for
+legal review; keep PLACEHOLDER items as written until the product owner
+replaces them.

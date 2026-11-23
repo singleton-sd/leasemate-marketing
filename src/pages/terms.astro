@@ -1,17 +1,23 @@
 ---
+import { getEntry, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { requirePageEntry } from "../lib/require-page-data";
+
+const entry = requirePageEntry(await getEntry("pages", "terms"), "terms");
+const { Content } = await render(entry);
+const { title, description, updated, draft } = entry.data;
 ---
 
 <BaseLayout
-  title="Terms of use | LeaseMate"
-  description="LeaseMate terms of use. Full text is coming soon."
+  title={`${title} | LeaseMate`}
+  description={description}
+  robots={draft ? "noindex,follow" : "index,follow"}
 >
   <main id="main-content">
-    <section class="shell legal-section" aria-labelledby="terms-title">
-      <h1 id="terms-title">Terms of use</h1>
-      <p class="legal-effective">Full text is coming soon.</p>
-      <div class="page-copy">
-        <p>Full text is coming soon.</p>
+    <section class="shell legal-section" aria-label={title}>
+      <p class="legal-effective">{updated}</p>
+      <div class="legal-prose">
+        <Content />
       </div>
     </section>
   </main>

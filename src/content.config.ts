@@ -5,6 +5,7 @@ import { z } from "astro/zod";
 import { contactPageSchema } from "./content/schemas/contact";
 import { featuresPageSchema } from "./content/schemas/features";
 import { homePageSchema } from "./content/schemas/home";
+import { privacyPageSchema, termsPageSchema } from "./content/schemas/legal";
 import { pricingPageSchema } from "./content/schemas/pricing";
 
 const pages = defineCollection({
@@ -14,6 +15,8 @@ const pages = defineCollection({
     featuresPageSchema,
     pricingPageSchema,
     contactPageSchema,
+    privacyPageSchema,
+    termsPageSchema,
   ]),
 });
 

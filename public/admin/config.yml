@@ -192,3 +192,59 @@ collections:
           - label: Body
             name: body
             widget: markdown
+      - label: Privacy
+        file: src/content/pages/privacy.md
+        name: privacy
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: privacy
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Updated
+            name: updated
+            widget: string
+            hint: "Visible last-updated line, including draft status."
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown
+      - label: Terms
+        file: src/content/pages/terms.md
+        name: terms
+        fields:
+          - label: Template
+            name: template
+            widget: hidden
+            default: terms
+          - label: Title
+            name: title
+            widget: string
+            hint: Page title (browser tab / SEO).
+          - label: Description
+            name: description
+            widget: text
+            hint: Short meta description for SEO.
+          - label: Updated
+            name: updated
+            widget: string
+            hint: "Visible last-updated line, including draft status."
+          - label: Draft
+            name: draft
+            widget: boolean
+            required: false
+            default: false
+          - label: Body
+            name: body
+            widget: markdown

@@ -411,6 +411,10 @@ main {
   padding-block: var(--lm-space-section);
 }
 
+.legal-section {
+  max-width: 52rem;
+}
+
 .legal-section h1 {
   font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: var(--ssd-font-weight-bold);
@@ -419,6 +423,111 @@ main {
 .legal-effective {
   margin-top: 0.75rem;
   color: var(--lm-text-muted);
+}
+
+.legal-prose {
+  margin-top: 1.5rem;
+}
+
+.legal-prose > blockquote:first-child,
+.draft-notice {
+  margin: 0 0 2rem;
+  padding: 1rem 1.25rem;
+  background: #000000;
+  color: #ffb300;
+  border: 2px solid #ffb300;
+  border-radius: var(--lm-radius-control);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.legal-prose > blockquote:first-child p,
+.draft-notice p {
+  margin: 0;
+  color: inherit;
+}
+
+.legal-prose > blockquote:first-child strong,
+.draft-notice strong {
+  color: inherit;
+  font-weight: 700;
+}
+
+.legal-prose h1 {
+  margin-top: 0;
+}
+
+.legal-prose h2 {
+  margin-top: 2.25rem;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+.legal-prose h3 {
+  margin-top: 1.75rem;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.legal-prose p {
+  margin-top: 1rem;
+  color: var(--lm-text-muted);
+  font-weight: var(--ssd-font-weight-regular);
+  line-height: 1.7;
+}
+
+.legal-prose ul,
+.legal-prose ol {
+  margin: 1rem 0 0;
+  padding-left: 1.5rem;
+  color: var(--lm-text-muted);
+  line-height: 1.7;
+  list-style: disc;
+}
+
+.legal-prose ol {
+  list-style: decimal;
+}
+
+.legal-prose li + li {
+  margin-top: 0.4rem;
+}
+
+.legal-prose strong {
+  color: var(--lm-text);
+  font-weight: var(--ssd-font-weight-bold);
+}
+
+.legal-prose a {
+  color: var(--lm-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.legal-prose a:hover {
+  color: var(--lm-accent-hovered);
+}
+
+.legal-prose table {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.legal-prose th,
+.legal-prose td {
+  border: 1px solid var(--lm-border);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  color: var(--lm-text-muted);
+}
+
+.legal-prose th {
+  color: var(--lm-text);
+  font-weight: var(--ssd-font-weight-bold);
+  background: var(--lm-surface);
 }
 
 .cta-band {
