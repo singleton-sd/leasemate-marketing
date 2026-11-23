@@ -21,6 +21,7 @@ const ROUTES = [
   "/features/",
   "/pricing/",
   "/contact/",
+  "/waitlist/",
   "/privacy/",
   "/terms/",
   "/missing-page-for-404",

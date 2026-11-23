@@ -11,9 +11,9 @@ workflow:
 
 1. Posts a **sticky PR comment** with the live preview link
 2. Puts a managed **Preview** section at the **top** of the PR body
-3. Runs `pnpm test:a11y` against the `/` PR build (all seven routes)
+3. Runs `pnpm test:a11y` against the `/` PR build (home, features, pricing, contact, waitlist, privacy, terms, 404)
 4. Captures Playwright full-page screenshots (desktop 1440, mobile 390, and 375) for every built HTML route, plus hover/focus, open mobile nav, and
-   waitlist form states (flag on only in the screenshot harness). Compares
+   contact and waitlist form states (flag on only in the screenshot harness). Compares
    each default route to a **build of the PR base SHA**, and hosts a report
    at `…/pr-<number>/visual/`
 5. Runs a required **`visual-review`** status check that **fails** when any
@@ -61,7 +61,7 @@ HTTPS** only after the certificate is available.
 Do not change DNS from this repository. Singleton Server adds a Route 53
 CNAME to `singleton-sd.github.io` only after Pato OKs.
 
-## Waitlist / Turnstile
+## Lead intake / Turnstile
 
 | Variable                     | Purpose                                                                                |
 | ---------------------------- | -------------------------------------------------------------------------------------- |

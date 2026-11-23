@@ -41,3 +41,20 @@ test("waitlist form renders the opening-soon branch unless the flag is on", asyn
   assert.match(form, /leadIntakeOn \? \(/);
   assert.match(envExample, /PUBLIC_LEAD_INTAKE_ENABLED=false/);
 });
+
+test("contact form renders the opening-soon branch unless the flag is on", async () => {
+  const form = await readFile(
+    new URL("src/components/ContactForm.astro", root),
+    "utf8",
+  );
+  assert.match(form, /isLeadIntakeEnabled/);
+  assert.match(form, /PUBLIC_LEAD_INTAKE_ENABLED/);
+  assert.match(form, /ContactFormIsland/);
+  assert.match(form, /data-contact-opening-soon/);
+  assert.match(form, /Contact form opening soon/);
+  assert.match(
+    form,
+    /The contact form is temporarily closed\. Check back here soon\./,
+  );
+  assert.match(form, /leadIntakeOn \? \(/);
+});

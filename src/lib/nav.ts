@@ -6,6 +6,7 @@ export type NavItem = {
 export const primaryNav = [
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Contact", href: "/contact" },
 ] as const satisfies readonly NavItem[];
 
 export const footerNav = {
@@ -14,7 +15,8 @@ export const footerNav = {
     { label: "Pricing", href: "/pricing" },
   ],
   Company: [
-    { label: "Waitlist", href: "/contact" },
+    { label: "Contact", href: "/contact" },
+    { label: "Waitlist", href: "/waitlist" },
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
   ],

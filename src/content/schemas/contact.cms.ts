@@ -2,7 +2,7 @@ import { draftCmsField, seoCmsFields, templateField } from "./cms.ts";
 
 export const contactPageCms = {
   file: "src/content/pages/contact.md",
-  label: "Waitlist",
+  label: "Contact",
   name: "contact",
   fields: [
     templateField("contact"),

@@ -18,10 +18,10 @@
  * - `index.html` — side-by-side review page (routes grouped; unchanged collapsed)
  * - `manifest.json` — includes `summary` for CI gating
  *
- * Extra interaction shots (hover, focus, open mobile nav, waitlist form
- * states) are captured from this harness only. The waitlist-on dist is built
- * here with PUBLIC_LEAD_INTAKE_ENABLED=true and is never used for the shipped
- * preview/production config.
+ * Extra interaction shots (hover, focus, open mobile nav, contact and waitlist
+ * form states) are captured from this harness only. The lead-intake-on dist is
+ * built here with PUBLIC_LEAD_INTAKE_ENABLED=true and is never used for the
+ * shipped preview/production config.
  *
  * Capture always exits 0 on successful screenshots. Use `pnpm test:visual:gate`
  * (or CI job `visual-review`) to fail when routes are `changed` or `new`.
@@ -291,6 +291,13 @@ async function waitForWaitlistForm(page) {
   });
 }
 
+async function waitForContactForm(page) {
+  await page.locator("[data-contact-form]").waitFor();
+  await page.locator("[data-contact-form-submit]:not([disabled])").waitFor({
+    timeout: 15_000,
+  });
+}
+
 function ensureWaitlistDist() {
   const out = path.join(rootDir, "test-results", "dist-waitlist-on");
   mkdirSync(path.dirname(out), { recursive: true });
@@ -435,9 +442,9 @@ const stateCaptures = [
   },
   {
     origin: waitlistOrigin,
-    urlPath: "contact",
+    urlPath: "waitlist",
     query: "",
-    id: "contact-waitlist-idle",
+    id: "waitlist-idle",
     viewports: defaultViewports,
     compareBase: false,
     prepare: async (page) => {
@@ -446,9 +453,9 @@ const stateCaptures = [
   },
   {
     origin: waitlistOrigin,
-    urlPath: "contact",
+    urlPath: "waitlist",
     query: "",
-    id: "contact-waitlist-focus",
+    id: "waitlist-focus",
     viewports: [VIEWPORTS.desktop],
     compareBase: false,
     prepare: async (page) => {
@@ -458,9 +465,9 @@ const stateCaptures = [
   },
   {
     origin: waitlistOrigin,
-    urlPath: "contact",
+    urlPath: "waitlist",
     query: "",
-    id: "contact-waitlist-invalid",
+    id: "waitlist-invalid",
     viewports: [VIEWPORTS.desktop, VIEWPORTS.mobile],
     compareBase: false,
     prepare: async (page) => {
@@ -471,9 +478,9 @@ const stateCaptures = [
   },
   {
     origin: waitlistOrigin,
-    urlPath: "contact",
+    urlPath: "waitlist",
     query: "",
-    id: "contact-waitlist-hover-submit",
+    id: "waitlist-hover-submit",
     viewports: [VIEWPORTS.desktop],
     compareBase: false,
     prepare: async (page) => {
@@ -483,9 +490,9 @@ const stateCaptures = [
   },
   {
     origin: waitlistOrigin,
-    urlPath: "contact",
+    urlPath: "waitlist",
     query: "",
-    id: "contact-waitlist-success",
+    id: "waitlist-success",
     viewports: [VIEWPORTS.desktop],
     compareBase: false,
     prepare: async (page) => {
@@ -507,6 +514,71 @@ const stateCaptures = [
       await page
         .locator("[data-waitlist-form-success]:not([hidden])")
         .waitFor();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-idle",
+    viewports: defaultViewports,
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForContactForm(page);
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-focus",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForContactForm(page);
+      await page.locator("#contact-name").focus();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-invalid",
+    viewports: [VIEWPORTS.desktop, VIEWPORTS.mobile],
+    compareBase: false,
+    prepare: async (page) => {
+      await waitForContactForm(page);
+      await page.locator("[data-contact-form-submit]").click();
+      await page.locator("#contact-name[aria-invalid='true']").waitFor();
+    },
+  },
+  {
+    origin: waitlistOrigin,
+    urlPath: "contact",
+    query: "",
+    id: "contact-success",
+    viewports: [VIEWPORTS.desktop],
+    compareBase: false,
+    prepare: async (page) => {
+      await page.route(
+        "https://api.singletonsd.com/v1/leads",
+        async (route) => {
+          await route.fulfill({
+            status: 202,
+            contentType: "application/json",
+            body: JSON.stringify({ id: "visual-contact" }),
+          });
+        },
+      );
+      await waitForContactForm(page);
+      await page.locator("#contact-name").fill("Ada Lovelace");
+      await page.locator("#contact-company").fill("Example House");
+      await page.locator("#contact-email").fill("ada@example.com");
+      await page.locator("#contact-role").selectOption("House owner");
+      await page.locator("#contact-message").fill("Please follow up.");
+      await page.locator("#contact-consent").check();
+      await page.locator("[data-contact-form-submit]").click();
+      await page.locator("[data-contact-form-success]:not([hidden])").waitFor();
     },
   },
 ];

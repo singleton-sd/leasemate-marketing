@@ -9,6 +9,7 @@ test("home page uses shared chrome and waitlist CTA", async () => {
   assert.match(page, /BaseLayout/);
   assert.match(page, /PageHero/);
   assert.match(page, /Join the waitlist/);
+  assert.match(page, /\/waitlist/);
   assert.match(page, /\/features/);
 });
 

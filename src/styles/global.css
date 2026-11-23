@@ -639,10 +639,21 @@ main {
   gap: 1rem;
 }
 
+.contact-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
 .contact-form__privacy {
   color: var(--lm-text-muted);
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+textarea.field-control {
+  min-height: 140px;
+  resize: vertical;
 }
 
 .lead-form__check {
@@ -734,7 +745,8 @@ main {
   }
 
   .site-footer__top,
-  .feature-grid {
+  .feature-grid,
+  .contact-form__row {
     grid-template-columns: 1fr;
   }
 

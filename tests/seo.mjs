@@ -14,6 +14,7 @@ const robotsTxtPath = new URL("robots.txt", distDir);
 const sitemapXmlPath = new URL("sitemap.xml", distDir);
 const ogImagePath = new URL("og-image.png", distDir);
 const contactHtmlPath = new URL("contact/index.html", distDir);
+const waitlistHtmlPath = new URL("waitlist/index.html", distDir);
 const privacyHtmlPath = new URL("privacy/index.html", distDir);
 const termsHtmlPath = new URL("terms/index.html", distDir);
 const privacyMdPath = new URL("src/content/pages/privacy.md", repoRoot);
@@ -56,6 +57,7 @@ const [
   robotsTxt,
   sitemapXml,
   contactHtml,
+  waitlistHtml,
   privacyHtml,
   termsHtml,
   privacyMd,
@@ -66,6 +68,7 @@ const [
   readFile(robotsTxtPath, "utf8"),
   readFile(sitemapXmlPath, "utf8"),
   readFile(contactHtmlPath, "utf8"),
+  readFile(waitlistHtmlPath, "utf8"),
   readFile(privacyHtmlPath, "utf8"),
   readFile(termsHtmlPath, "utf8"),
   readFile(privacyMdPath, "utf8"),
@@ -192,20 +195,26 @@ testMetadata("favicons included", () => {
   );
 });
 
-testMetadata("default waitlist state is opening soon", () => {
-  assert.match(contactHtml, /Waitlist opening soon/i);
-  assert.match(contactHtml, /data-waitlist-opening-soon/);
-  assert.doesNotMatch(contactHtml, /data-waitlist-form=/);
+testMetadata("default contact and waitlist state is opening soon", () => {
+  assert.match(contactHtml, /Contact form opening soon/i);
+  assert.match(contactHtml, /data-contact-opening-soon/);
+  assert.doesNotMatch(contactHtml, /data-contact-form=/);
+  assert.match(waitlistHtml, /Waitlist opening soon/i);
+  assert.match(waitlistHtml, /data-waitlist-opening-soon/);
+  assert.doesNotMatch(waitlistHtml, /data-waitlist-form=/);
 });
 
 testMetadata("built pages have no contact email or mailto links", () => {
   const mailbox = /[A-Za-z0-9._%+-]+@leasemate\.singletonsd\.com/;
   assert.doesNotMatch(indexHtml, /mailto:/i);
   assert.doesNotMatch(contactHtml, /mailto:/i);
+  assert.doesNotMatch(waitlistHtml, /mailto:/i);
   assert.doesNotMatch(indexHtml, mailbox);
   assert.doesNotMatch(contactHtml, mailbox);
+  assert.doesNotMatch(waitlistHtml, mailbox);
   assert.doesNotMatch(indexHtml, /hello@/i);
   assert.doesNotMatch(contactHtml, /hello@/i);
+  assert.doesNotMatch(waitlistHtml, /hello@/i);
 });
 
 testMetadata("sitemap lists primary public routes", () => {
@@ -216,6 +225,10 @@ testMetadata("sitemap lists primary public routes", () => {
   assert.match(
     sitemapXml,
     /<loc>https:\/\/leasemate\.singletonsd\.com\/contact\/<\/loc>/,
+  );
+  assert.match(
+    sitemapXml,
+    /<loc>https:\/\/leasemate\.singletonsd\.com\/waitlist\/<\/loc>/,
   );
   assert.match(
     sitemapXml,

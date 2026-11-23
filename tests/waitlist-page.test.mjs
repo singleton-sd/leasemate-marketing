@@ -4,10 +4,13 @@ import test from "node:test";
 
 const root = new URL("../", import.meta.url);
 
-test("contact page is the waitlist surface with both flag states", async () => {
-  const page = await readFile(new URL("src/pages/contact.astro", root), "utf8");
+test("waitlist page uses shared chrome and the waitlist form island", async () => {
+  const page = await readFile(
+    new URL("src/pages/waitlist.astro", root),
+    "utf8",
+  );
   const content = await readFile(
-    new URL("src/content/pages/contact.md", root),
+    new URL("src/content/pages/waitlist.md", root),
     "utf8",
   );
   const island = await readFile(
@@ -21,7 +24,7 @@ test("contact page is the waitlist surface with both flag states", async () => {
 
   assert.match(page, /BaseLayout/);
   assert.match(page, /WaitlistForm/);
-  assert.match(content, /^template: contact$/m);
+  assert.match(content, /^template: waitlist$/m);
   assert.match(content, /Join the LeaseMate waitlist/);
   assert.match(content, /Waitlist opening soon/);
   assert.match(island, /formType: "waitlist"/);
@@ -29,10 +32,11 @@ test("contact page is the waitlist surface with both flag states", async () => {
   assert.match(island, /marketingOptIn/);
   assert.match(form, /PUBLIC_TURNSTILE_SITE_KEY/);
   assert.match(form, /PUBLIC_LEAD_INTAKE_ENABLED/);
+  assert.match(form, /data-waitlist-opening-soon/);
   assert.doesNotMatch(island, /PostKit/);
   assert.doesNotMatch(form, /resolve-postkit-api-base-url/);
-  assert.doesNotMatch(page, /hello@|mailto:/);
-  assert.doesNotMatch(content, /hello@|mailto:/);
-  assert.doesNotMatch(island, /hello@|mailto:/);
-  assert.doesNotMatch(form, /hello@|mailto:/);
+  assert.doesNotMatch(page, /hello@|mailto:|support@/);
+  assert.doesNotMatch(content, /hello@|mailto:|support@/);
+  assert.doesNotMatch(island, /hello@|mailto:|support@/);
+  assert.doesNotMatch(form, /hello@|mailto:|support@/);
 });

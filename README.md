@@ -34,5 +34,5 @@ Logos in `public/` are copied from
 PR #1 (`feature/leasemate-brand-assets-44bb`) and should be re-synced from
 `main` once that PR merges.
 
-Waitlist POST to `https://api.singletonsd.com/v1/leads` is gated by
+Contact and waitlist POST to `https://api.singletonsd.com/v1/leads` is gated by
 `PUBLIC_LEAD_INTAKE_ENABLED` (off by default until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh)).

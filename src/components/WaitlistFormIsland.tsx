@@ -32,7 +32,7 @@ export type WaitlistFormIslandProps = {
   successBody?: string;
   submitLabel?: string;
   privacyHref: string;
-  featuresHref: string;
+  contactHref: string;
   turnstileSiteKey?: string;
 };
 
@@ -70,7 +70,7 @@ export default function WaitlistFormIsland({
   successBody = "Thank you. We will email you when LeaseMate waitlist places open.",
   submitLabel = "Join waitlist",
   privacyHref,
-  featuresHref,
+  contactHref,
   turnstileSiteKey = "",
 }: WaitlistFormIslandProps) {
   const successRef = useRef<HTMLDivElement>(null);
@@ -311,9 +311,9 @@ export default function WaitlistFormIsland({
             />
           ) : null}
           <p className="contact-form__privacy">
-            Want the product outline first?{" "}
-            <a className="text-link" href={featuresHref}>
-              <span>See features</span>
+            Prefer to send a longer enquiry?{" "}
+            <a className="text-link" href={contactHref}>
+              <span>Contact us</span>
               <span aria-hidden="true">→</span>
             </a>
           </p>

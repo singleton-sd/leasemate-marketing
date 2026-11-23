@@ -1,7 +1,7 @@
 ---
 import { getEntry } from "astro:content";
+import ContactForm from "../components/ContactForm.astro";
 import MetaPair from "../components/MetaPair.astro";
-import WaitlistForm from "../components/WaitlistForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { requirePageData } from "../lib/require-page-data";
 import "../styles/pages/contact.css";
@@ -9,15 +9,15 @@ import "../styles/pages/contact.css";
 const {
   title,
   description,
-  eyebrow = "Waitlist",
+  eyebrow = "Contact",
   headline,
   summary,
   status = "Early access · a Singleton SD product",
-  submitLabel = "Join waitlist",
-  successTitle = "You're on the list.",
-  successBody = "Thank you. We will email you when LeaseMate waitlist places open.",
-  openingSoonTitle = "Waitlist opening soon",
-  openingSoonBody = "The waitlist form is temporarily closed. Check back here soon.",
+  submitLabel = "Send message",
+  successTitle = "Message sent.",
+  successBody = "Thank you. We will follow up by email if your enquiry needs a response.",
+  openingSoonTitle = "Contact form opening soon",
+  openingSoonBody = "The contact form is temporarily closed. Check back here soon.",
 } = requirePageData(await getEntry("pages", "contact"), "contact");
 ---
 
@@ -33,7 +33,7 @@ const {
         </div>
       </div>
       <div class="contact-page__form">
-        <WaitlistForm
+        <ContactForm
           submitLabel={submitLabel}
           successTitle={successTitle}
           successBody={successBody}

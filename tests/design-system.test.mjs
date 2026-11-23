@@ -84,9 +84,10 @@ test("header and footer expose the LeaseMate IA", async () => {
 
   assert.deepEqual(
     primaryNav.map((item) => item.href),
-    ["/features", "/pricing"],
+    ["/features", "/pricing", "/contact"],
   );
   assert.ok(footerNav.Company.some((item) => item.href === "/contact"));
+  assert.ok(footerNav.Company.some((item) => item.href === "/waitlist"));
   assert.equal(isActivePath("/features", "/features", "/"), true);
   assert.equal(isActivePath("/", "/", "/"), true);
   assert.equal(isActivePath("/features", "/", "/"), false);

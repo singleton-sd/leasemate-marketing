@@ -4,6 +4,10 @@ import test from "node:test";
 
 const homePath = new URL("../src/content/pages/home.md", import.meta.url);
 const contactPath = new URL("../src/content/pages/contact.md", import.meta.url);
+const waitlistPath = new URL(
+  "../src/content/pages/waitlist.md",
+  import.meta.url,
+);
 const featuresPath = new URL(
   "../src/content/pages/features.md",
   import.meta.url,
@@ -49,9 +53,22 @@ test("features content uses the Victoria product cards", async () => {
   assert.doesNotMatch(content, /Identity documents later/);
 });
 
-test("contact waitlist content exposes opening-soon copy", async () => {
+test("contact content exposes opening-soon copy and no mailbox", async () => {
   const content = await readFile(contactPath, "utf8");
   assert.match(content, /^template: contact$/m);
+  assert.match(content, /Talk to us about LeaseMate\./);
+  assert.match(content, /Contact form opening soon/);
+  assert.match(
+    content,
+    /The contact form is temporarily closed\. Check back here soon\./,
+  );
+  assert.doesNotMatch(content, /hello@/);
+  assert.doesNotMatch(content, /mailto:/);
+});
+
+test("waitlist content exposes opening-soon copy and no mailbox", async () => {
+  const content = await readFile(waitlistPath, "utf8");
+  assert.match(content, /^template: waitlist$/m);
   assert.match(
     content,
     /Register your interest in LeaseMate and hear when early access opens\./,
@@ -124,12 +141,16 @@ test("retired audience and billing copy is gone from source pages", async () => 
     homePath,
     featuresPath,
     contactPath,
+    waitlistPath,
     pricingPath,
     privacyPath,
     termsPath,
     new URL("../src/layouts/BaseLayout.astro", import.meta.url),
     new URL("../src/components/SiteFooter.astro", import.meta.url),
     new URL("../src/pages/contact.astro", import.meta.url),
+    new URL("../src/pages/waitlist.astro", import.meta.url),
+    new URL("../src/components/ContactForm.astro", import.meta.url),
+    new URL("../src/components/ContactFormIsland.tsx", import.meta.url),
     new URL("../src/components/WaitlistForm.astro", import.meta.url),
     new URL("../src/components/WaitlistFormIsland.tsx", import.meta.url),
     new URL("../src/components/TurnstileWidget.tsx", import.meta.url),

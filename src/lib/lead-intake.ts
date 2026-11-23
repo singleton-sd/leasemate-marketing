@@ -7,7 +7,7 @@ export const LEAD_INTAKE_URL = "https://api.singletonsd.com/v1/leads";
 export const LEAD_SOURCE_SITE = "https://leasemate.singletonsd.com";
 export const LEAD_PRODUCT = "leasemate";
 export const LEAD_WAITLIST_FEATURE = "waitlist";
-export const LEAD_CONSENT_TEXT_VERSION = "leasemate-privacy-2026-11-15";
+export const LEAD_CONSENT_TEXT_VERSION = "leasemate-privacy-2026-11-23";
 export const LEAD_BODY_MAX_BYTES = 16 * 1024;
 
 export const LEAD_NAME_MAX = 120;
@@ -370,7 +370,7 @@ export async function submitLeadRequest(
       }
     }
 
-    if (response.status === 202 || response.status === 409) {
+    if (response.status === 202) {
       const id =
         data &&
         typeof data === "object" &&
