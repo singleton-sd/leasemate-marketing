@@ -1,6 +1,6 @@
 {
   "basePath": "/",
-  "headSha": "755780089411ca961f2f61a9a16e05fc241fde85",
+  "headSha": "65130b1f3b39c917ae86df8e9ba78b0eee4be151",
   "baseSha": "df0f530610cd4c9cec103c4313d07615618f1b04",
   "baseLabel": "local:/home/runner/work/leasemate-marketing/leasemate-marketing/visual-base/dist",
   "baseSiteUrl": null,
@@ -35,7 +35,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:39575/404",
+      "baseUrl": "http://127.0.0.1:39957/404",
       "status": "unchanged"
     },
     {
@@ -46,7 +46,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:39575/404",
+      "baseUrl": "http://127.0.0.1:39957/404",
       "status": "unchanged"
     },
     {
@@ -57,7 +57,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:39575/404",
+      "baseUrl": "http://127.0.0.1:39957/404",
       "status": "unchanged"
     },
     {
@@ -68,7 +68,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:39575/contact",
+      "baseUrl": "http://127.0.0.1:39957/contact",
       "status": "unchanged"
     },
     {
@@ -79,7 +79,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:39575/contact",
+      "baseUrl": "http://127.0.0.1:39957/contact",
       "status": "unchanged"
     },
     {
@@ -90,7 +90,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:39575/contact",
+      "baseUrl": "http://127.0.0.1:39957/contact",
       "status": "unchanged"
     },
     {
@@ -101,7 +101,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:39575/features",
+      "baseUrl": "http://127.0.0.1:39957/features",
       "status": "unchanged"
     },
     {
@@ -112,7 +112,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:39575/features",
+      "baseUrl": "http://127.0.0.1:39957/features",
       "status": "unchanged"
     },
     {
@@ -123,7 +123,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:39575/features",
+      "baseUrl": "http://127.0.0.1:39957/features",
       "status": "unchanged"
     },
     {
@@ -134,7 +134,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:39575/",
+      "baseUrl": "http://127.0.0.1:39957/",
       "status": "unchanged"
     },
     {
@@ -145,7 +145,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:39575/",
+      "baseUrl": "http://127.0.0.1:39957/",
       "status": "unchanged"
     },
     {
@@ -156,7 +156,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:39575/",
+      "baseUrl": "http://127.0.0.1:39957/",
       "status": "unchanged"
     },
     {
@@ -167,7 +167,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:39575/pricing",
+      "baseUrl": "http://127.0.0.1:39957/pricing",
       "status": "unchanged"
     },
     {
@@ -178,7 +178,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:39575/pricing",
+      "baseUrl": "http://127.0.0.1:39957/pricing",
       "status": "unchanged"
     },
     {
@@ -189,7 +189,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:39575/pricing",
+      "baseUrl": "http://127.0.0.1:39957/pricing",
       "status": "unchanged"
     },
     {
@@ -198,9 +198,9 @@
       "prFile": "pr/privacy-desktop.png",
       "baseFile": "base/privacy-desktop.png",
       "diffFile": "diff/privacy-desktop.png",
-      "mismatched": 11140588,
+      "mismatched": 13186763,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:39575/privacy",
+      "baseUrl": "http://127.0.0.1:39957/privacy",
       "status": "changed"
     },
     {
@@ -209,9 +209,9 @@
       "prFile": "pr/privacy-mobile.png",
       "baseFile": "base/privacy-mobile.png",
       "diffFile": "diff/privacy-mobile.png",
-      "mismatched": 5081780,
+      "mismatched": 6178988,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:39575/privacy",
+      "baseUrl": "http://127.0.0.1:39957/privacy",
       "status": "changed"
     },
     {
@@ -220,9 +220,9 @@
       "prFile": "pr/privacy-mobile-375.png",
       "baseFile": "base/privacy-mobile-375.png",
       "diffFile": "diff/privacy-mobile-375.png",
-      "mismatched": 5092979,
+      "mismatched": 6223618,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:39575/privacy",
+      "baseUrl": "http://127.0.0.1:39957/privacy",
       "status": "changed"
     },
     {
@@ -231,9 +231,9 @@
       "prFile": "pr/terms-desktop.png",
       "baseFile": "base/terms-desktop.png",
       "diffFile": "diff/terms-desktop.png",
-      "mismatched": 8448989,
+      "mismatched": 10316071,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:39575/terms",
+      "baseUrl": "http://127.0.0.1:39957/terms",
       "status": "changed"
     },
     {
@@ -242,9 +242,9 @@
       "prFile": "pr/terms-mobile.png",
       "baseFile": "base/terms-mobile.png",
       "diffFile": "diff/terms-mobile.png",
-      "mismatched": 3952551,
+      "mismatched": 4995293,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:39575/terms",
+      "baseUrl": "http://127.0.0.1:39957/terms",
       "status": "changed"
     },
     {
@@ -253,9 +253,9 @@
       "prFile": "pr/terms-mobile-375.png",
       "baseFile": "base/terms-mobile-375.png",
       "diffFile": "diff/terms-mobile-375.png",
-      "mismatched": 3920297,
+      "mismatched": 4936138,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:39575/terms",
+      "baseUrl": "http://127.0.0.1:39957/terms",
       "status": "changed"
     },
     {
