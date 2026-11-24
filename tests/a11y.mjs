@@ -115,6 +115,21 @@ const browser = await chromium.launch();
 const context = await browser.newContext({
   viewport: { width: 1280, height: 720 },
 });
+// Lead-intake-on pages hydrate Turnstile from Cloudflare, which keeps a
+// connection open and never reaches networkidle. Stub it like visual.mjs.
+await context.addInitScript(() => {
+  window.turnstile = {
+    render(container, options) {
+      if (container instanceof HTMLElement) {
+        container.dataset.turnstileReady = "true";
+      }
+      queueMicrotask(() => options?.callback?.("a11y-turnstile-token"));
+      return "a11y-widget";
+    },
+    reset() {},
+    remove() {},
+  };
+});
 const page = await context.newPage();
 
 try {
