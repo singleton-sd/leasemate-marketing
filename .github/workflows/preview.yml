@@ -78,6 +78,8 @@ jobs:
       - name: Accessibility checks
         run: pnpm test:a11y
       - name: SEO metadata checks
+        env:
+          PUBLIC_LEAD_INTAKE_ENABLED: "false"
         run: pnpm test:seo
       - name: Lead form Playwright checks
         run: pnpm test:lead-forms
@@ -93,6 +95,8 @@ jobs:
         env:
           PUBLIC_LEAD_INTAKE_ENABLED: "true"
         run: pnpm build && pnpm test:seo
+      - name: Accessibility checks with lead intake on
+        run: pnpm test:a11y
       - name: Build preview site
         run: pnpm build
         env:

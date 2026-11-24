@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 import { getNamedMetaContent } from "./seo-helpers.mjs";
 
 const repoRoot = new URL("..", import.meta.url);
 
 const { isLeadIntakeEnabled } = await import(
-  pathToFileURL(new URL("src/lib/lead-intake-flag.ts", repoRoot).pathname).href
+  new URL("src/lib/lead-intake-flag.ts", repoRoot).href
 );
 
 const envLeadIntakeSpecified = Object.hasOwn(
