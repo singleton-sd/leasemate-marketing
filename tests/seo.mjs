@@ -25,6 +25,7 @@ const notFoundHtmlPath = new URL("404.html", distDir);
 const robotsTxtPath = new URL("robots.txt", distDir);
 const sitemapXmlPath = new URL("sitemap.xml", distDir);
 const ogImagePath = new URL("og-image.png", distDir);
+const nojekyllPath = new URL(".nojekyll", distDir);
 const contactHtmlPath = new URL("contact/index.html", distDir);
 const waitlistHtmlPath = new URL("waitlist/index.html", distDir);
 const privacyHtmlPath = new URL("privacy/index.html", distDir);
@@ -185,6 +186,10 @@ testMetadata("Open Graph and Twitter cards reference production domain", () => {
     "Missing dist/og-image.png",
   );
   assert.match(indexHtml, /name="twitter:card" content="summary_large_image"/i);
+});
+
+testMetadata(".nojekyll is present for GitHub Pages", () => {
+  assert.ok(existsSync(fileURLToPath(nojekyllPath)), "Missing dist/.nojekyll");
 });
 
 testMetadata("structured data present", () => {
