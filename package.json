@@ -16,7 +16,7 @@
     "lint": "eslint . && astro check",
     "playwright:install": "playwright install chromium",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "test:seo": "node tests/seo.mjs",
+    "test:seo": "node --experimental-strip-types tests/seo.mjs",
     "test:a11y": "node tests/a11y.mjs",
     "test:lead-forms": "node tests/lead-forms.mjs",
     "test:visual": "node tests/visual.mjs",

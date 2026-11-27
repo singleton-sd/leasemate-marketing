@@ -6,6 +6,18 @@ import { fileURLToPath } from "node:url";
 import { getNamedMetaContent } from "./seo-helpers.mjs";
 
 const repoRoot = new URL("..", import.meta.url);
+
+const { isLeadIntakeEnabled } = await import(
+  new URL("src/lib/lead-intake-flag.ts", repoRoot).href
+);
+
+const envLeadIntakeSpecified = Object.hasOwn(
+  process.env,
+  "PUBLIC_LEAD_INTAKE_ENABLED",
+);
+const envLeadIntakeOn = isLeadIntakeEnabled(
+  process.env.PUBLIC_LEAD_INTAKE_ENABLED,
+);
 const distDir = new URL("dist/", repoRoot);
 
 const indexHtmlPath = new URL("index.html", distDir);
@@ -195,7 +207,37 @@ testMetadata("favicons included", () => {
   );
 });
 
-testMetadata("default contact and waitlist state is opening soon", () => {
+testMetadata("contact and waitlist follow the lead-intake flag", () => {
+  const contactHasForm = /data-contact-form=/.test(contactHtml);
+  const waitlistHasForm = /data-waitlist-form=/.test(waitlistHtml);
+  // pages.yml runs this step without the build env, so fall back to dist.
+  const leadIntakeOn = envLeadIntakeSpecified
+    ? envLeadIntakeOn
+    : contactHasForm && waitlistHasForm;
+
+  if (envLeadIntakeSpecified) {
+    assert.equal(
+      contactHasForm,
+      envLeadIntakeOn,
+      "contact page does not match PUBLIC_LEAD_INTAKE_ENABLED",
+    );
+    assert.equal(
+      waitlistHasForm,
+      envLeadIntakeOn,
+      "waitlist page does not match PUBLIC_LEAD_INTAKE_ENABLED",
+    );
+  }
+
+  if (leadIntakeOn) {
+    assert.match(contactHtml, /data-contact-form=/);
+    assert.doesNotMatch(contactHtml, /data-contact-opening-soon/);
+    assert.match(waitlistHtml, /data-waitlist-form=/);
+    assert.doesNotMatch(waitlistHtml, /data-waitlist-opening-soon/);
+    assertTurnstileMarkup(contactHtml, "contact");
+    assertTurnstileMarkup(waitlistHtml, "waitlist");
+    return;
+  }
+
   assert.match(contactHtml, /Contact form opening soon/i);
   assert.match(contactHtml, /data-contact-opening-soon/);
   assert.doesNotMatch(contactHtml, /data-contact-form=/);
@@ -253,6 +295,34 @@ testMetadata("sitemap and robots reference production domain", () => {
     /Sitemap:\s*https:\/\/leasemate\.singletonsd\.com\/sitemap\.xml/,
   );
 });
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function assertTurnstileMarkup(html, pageLabel) {
+  assert.match(
+    html,
+    /data-lead-turnstile=/,
+    `${pageLabel} page is missing the Turnstile widget host`,
+  );
+  const turnstileSiteKey = (process.env.PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
+  if (turnstileSiteKey) {
+    assert.match(
+      html,
+      new RegExp(
+        `turnstileSiteKey&quot;:\\[0,&quot;${escapeRegExp(turnstileSiteKey)}&quot;\\]`,
+      ),
+      `${pageLabel} page is missing the Turnstile site key in island props`,
+    );
+    return;
+  }
+  assert.match(
+    html,
+    /turnstileSiteKey&quot;:\[0,&quot;[^&]+&quot;\]/,
+    `${pageLabel} page is missing serialized Turnstile site-key markup`,
+  );
+}
 
 function testMetadata(label, fn) {
   try {

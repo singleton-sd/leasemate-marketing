@@ -93,6 +93,12 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   assert.match(workflow, /ARTIFACT="visual-pr-\$\{PR_NUMBER\}"/);
   assert.match(workflow, /header:\s*leasemate-preview/);
   assert.match(workflow, /pnpm test:visual/);
+  assert.match(workflow, /pnpm test:seo/);
+  assert.match(
+    workflow,
+    /- name: SEO metadata checks with lead intake on\n {8}env:\n {10}PUBLIC_LEAD_INTAKE_ENABLED: "true"\n {8}run: pnpm build && pnpm test:seo/,
+  );
+  assert.match(workflow, /Accessibility checks with lead intake on/);
   assert.match(workflow, /name:\s*visual-review/);
   assert.match(workflow, /visual-gate\.mjs/);
   assert.match(workflow, /visual-accepted/);
