@@ -43,14 +43,60 @@ test("home content contains the required public fields", async () => {
 test("features content uses the Victoria product cards", async () => {
   const content = await readFile(featuresPath, "utf8");
   assert.match(content, /house owners and lease holders in Victoria/);
-  assert.match(content, /Properties, rooms and beds/);
+  assert.match(content, /Being built in Victoria\. Not a live app yet\./);
+  assert.match(content, /Properties and rooms/);
+  assert.match(content, /Let a whole house, or let it room by room/);
   assert.match(content, /Victorian contracts/);
-  assert.match(content, /From lead to signed lease/);
-  assert.match(content, /ID when someone becomes a tenant/);
+  assert.match(content, /official CAV Form 1 for up to six renters/);
+  assert.match(content, /prescribed wording stays locked/);
+  assert.match(
+    content,
+    /Room sublets use a room agreement for one or two occupants/,
+  );
+  assert.match(content, /From lead to agreement/);
+  assert.match(content, /Electronic signing is planned, not live yet/);
+  assert.match(content, /an owner or admin approves it before it goes out/);
+  assert.match(content, /ID before signing/);
+  assert.match(
+    content,
+    /Every occupant's ID is verified before the agreement can be sent for signing/,
+  );
+  assert.match(content, /Bond lodging/);
+  assert.match(content, /marked as lodged/);
+  assert.match(content, /links out to the RTBA/);
+  assert.match(content, /Lodging happens on the RTBA site, not in the app/);
+  assert.match(content, /Waitlist, not self-serve yet/);
   assert.doesNotMatch(content, /Copy will tighten as the product owner/);
   assert.doesNotMatch(content, /Shared lease record/);
   assert.doesNotMatch(content, /Tenant and landlord paths/);
   assert.doesNotMatch(content, /Identity documents later/);
+});
+
+test("marketing pages do not overstate the 23 Nov MVP", async () => {
+  const files = [homePath, featuresPath, pricingPath];
+  const banned = [
+    /\broom or bed\b/i,
+    /\bbeds?\b/i,
+    /Bed agreement/i,
+    /\blet a bed\b/i,
+    /\binspection/i,
+    /condition[ -]?report/i,
+    /Documenso/i,
+    /Form 7/i,
+    /rooming[ -]house/i,
+    /Identity documents are collected/i,
+    /RTBA integration/i,
+  ];
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    for (const pattern of banned) {
+      assert.doesNotMatch(
+        source,
+        pattern,
+        `${file.pathname} still matches ${pattern}`,
+      );
+    }
+  }
 });
 
 test("contact content exposes opening-soon copy and no mailbox", async () => {
