@@ -1,7 +1,7 @@
 {
   "basePath": "/",
-  "headSha": "86cad028a7b38f32420054bad061039f5f490021",
-  "baseSha": "41a9bf355a24c3e93ea74218baff5ba5af17ac31",
+  "headSha": "baf02be874c6e20632a7dddb6acb781c036a5d19",
+  "baseSha": "6100c2d1f151cfbbd52252f3814ac9a92adc2038",
   "baseLabel": "local:/home/runner/work/leasemate-marketing/leasemate-marketing/visual-base/dist",
   "baseSiteUrl": null,
   "baseDistDir": "/home/runner/work/leasemate-marketing/leasemate-marketing/visual-base/dist",
@@ -36,7 +36,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:43633/404",
+      "baseUrl": "http://127.0.0.1:34365/404",
       "status": "unchanged"
     },
     {
@@ -47,7 +47,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:43633/404",
+      "baseUrl": "http://127.0.0.1:34365/404",
       "status": "unchanged"
     },
     {
@@ -58,7 +58,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:43633/404",
+      "baseUrl": "http://127.0.0.1:34365/404",
       "status": "unchanged"
     },
     {
@@ -69,7 +69,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:43633/contact",
+      "baseUrl": "http://127.0.0.1:34365/contact",
       "status": "unchanged"
     },
     {
@@ -80,7 +80,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:43633/contact",
+      "baseUrl": "http://127.0.0.1:34365/contact",
       "status": "unchanged"
     },
     {
@@ -91,7 +91,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:43633/contact",
+      "baseUrl": "http://127.0.0.1:34365/contact",
       "status": "unchanged"
     },
     {
@@ -102,7 +102,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:43633/features",
+      "baseUrl": "http://127.0.0.1:34365/features",
       "status": "unchanged"
     },
     {
@@ -113,7 +113,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:43633/features",
+      "baseUrl": "http://127.0.0.1:34365/features",
       "status": "unchanged"
     },
     {
@@ -124,7 +124,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:43633/features",
+      "baseUrl": "http://127.0.0.1:34365/features",
       "status": "unchanged"
     },
     {
@@ -135,7 +135,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:43633/",
+      "baseUrl": "http://127.0.0.1:34365/",
       "status": "unchanged"
     },
     {
@@ -146,7 +146,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:43633/",
+      "baseUrl": "http://127.0.0.1:34365/",
       "status": "unchanged"
     },
     {
@@ -157,7 +157,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:43633/",
+      "baseUrl": "http://127.0.0.1:34365/",
       "status": "unchanged"
     },
     {
@@ -168,7 +168,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:43633/pricing",
+      "baseUrl": "http://127.0.0.1:34365/pricing",
       "status": "unchanged"
     },
     {
@@ -179,7 +179,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:43633/pricing",
+      "baseUrl": "http://127.0.0.1:34365/pricing",
       "status": "unchanged"
     },
     {
@@ -190,7 +190,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:43633/pricing",
+      "baseUrl": "http://127.0.0.1:34365/pricing",
       "status": "unchanged"
     },
     {
@@ -201,7 +201,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:43633/privacy",
+      "baseUrl": "http://127.0.0.1:34365/privacy",
       "status": "unchanged"
     },
     {
@@ -212,7 +212,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:43633/privacy",
+      "baseUrl": "http://127.0.0.1:34365/privacy",
       "status": "unchanged"
     },
     {
@@ -223,7 +223,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:43633/privacy",
+      "baseUrl": "http://127.0.0.1:34365/privacy",
       "status": "unchanged"
     },
     {
@@ -234,7 +234,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:43633/terms",
+      "baseUrl": "http://127.0.0.1:34365/terms",
       "status": "unchanged"
     },
     {
@@ -245,7 +245,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:43633/terms",
+      "baseUrl": "http://127.0.0.1:34365/terms",
       "status": "unchanged"
     },
     {
@@ -256,7 +256,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:43633/terms",
+      "baseUrl": "http://127.0.0.1:34365/terms",
       "status": "unchanged"
     },
     {
@@ -267,7 +267,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:43633/waitlist",
+      "baseUrl": "http://127.0.0.1:34365/waitlist",
       "status": "unchanged"
     },
     {
@@ -278,7 +278,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:43633/waitlist",
+      "baseUrl": "http://127.0.0.1:34365/waitlist",
       "status": "unchanged"
     },
     {
@@ -289,7 +289,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:43633/waitlist",
+      "baseUrl": "http://127.0.0.1:34365/waitlist",
       "status": "unchanged"
     },
     {
