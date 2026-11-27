@@ -51,6 +51,10 @@ the repository root. Set the custom domain to `leasemate.singletonsd.com`.
 The production build includes a matching `CNAME` file so branch deployments
 retain the custom domain.
 
+GitHub Pages from the `gh-pages` branch runs Jekyll, which hides paths that
+start with `_` (including Astro's `/_astro/` assets). Production and preview
+builds include an empty `.nojekyll` so those files are served.
+
 Workflow `GITHUB_TOKEN` stays read-only. The singleton-release GitHub App
 needs to be installed on this repository (Pato) so Pages deploys can mint a
 write token.

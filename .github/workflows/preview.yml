@@ -101,6 +101,8 @@ jobs:
         run: pnpm build
         env:
           PREVIEW_BASE_PATH: /pr-preview/pr-${{ github.event.number }}/
+      - name: Ensure .nojekyll for GitHub Pages
+        run: touch dist/.nojekyll
       - name: Host visual report under preview
         run: |
           rm -rf dist/visual
@@ -117,6 +119,7 @@ jobs:
         with:
           name: preview-dist
           path: dist
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 1
 
