@@ -55,6 +55,7 @@ test("features content uses the Victoria product cards", async () => {
   );
   assert.match(content, /From lead to agreement/);
   assert.match(content, /Electronic signing is planned, not live yet/);
+  assert.match(content, /an owner or admin approves it before it goes out/);
   assert.match(content, /ID before signing/);
   assert.match(
     content,
@@ -75,13 +76,14 @@ test("marketing pages do not overstate the 23 Nov MVP", async () => {
   const files = [homePath, featuresPath, pricingPath];
   const banned = [
     /\broom or bed\b/i,
-    /\bbeds\b/i,
+    /\bbeds?\b/i,
     /Bed agreement/i,
+    /\blet a bed\b/i,
     /\binspection/i,
     /condition[ -]?report/i,
     /Documenso/i,
     /Form 7/i,
-    /rooming house/i,
+    /rooming[ -]house/i,
     /Identity documents are collected/i,
     /RTBA integration/i,
   ];
