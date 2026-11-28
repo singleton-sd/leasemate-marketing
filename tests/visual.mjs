@@ -257,6 +257,10 @@ async function screenshotPage(
     deviceScaleFactor: 1,
   });
   await context.addInitScript(installTurnstileStub);
+  await context.route("https://support.singletonsd.com/**", (route) =>
+    route.abort(),
+  );
+  await context.route(/\/packs\/js\/sdk\.js(?:\?|$)/, (route) => route.abort());
   const page = await context.newPage();
   try {
     const response = await page.goto(url, {

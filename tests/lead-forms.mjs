@@ -142,6 +142,9 @@ const origin = `http://127.0.0.1:${leadOnPort}`;
 
 const browser = await chromium.launch();
 const context = await browser.newContext();
+await context.route("https://support.singletonsd.com/**", (route) =>
+  route.abort(),
+);
 await context.addInitScript(() => {
   let lastOptions;
   window.turnstile = {
@@ -410,6 +413,9 @@ try {
   assert.equal(waitlistSuccess[0].body.formType, "waitlist");
 
   const failContext = await browser.newContext();
+  await failContext.route("https://support.singletonsd.com/**", (route) =>
+    route.abort(),
+  );
   const failPage = await failContext.newPage();
   try {
     let allowTurnstileScript = false;

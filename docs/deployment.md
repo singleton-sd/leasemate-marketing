@@ -73,3 +73,23 @@ CNAME to `singleton-sd.github.io` only after Pato OKs.
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare Turnstile site key baked into static JS when the flag is on                 |
 
 Never commit the Turnstile secret; job-kit verifies tokens.
+
+## Chatwoot live chat
+
+The marketing-site widget is off unless both public build-time variables are
+set. They are website-inbox config, not secrets.
+
+| Variable                        | Purpose                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------ |
+| `PUBLIC_CHATWOOT_WEBSITE_TOKEN` | Public Chatwoot website-inbox token for inbox "LeaseMate Marketing Site" |
+| `PUBLIC_CHATWOOT_BASE_URL`      | Chatwoot origin. Production value: `https://support.singletonsd.com`     |
+
+Set both as **repository variables** (Settings → Secrets and variables →
+Actions → Variables), the same way as `PUBLIC_TURNSTILE_SITE_KEY`. Preview and
+production builds read `vars.PUBLIC_CHATWOOT_*`. Leave them unset to keep the
+widget off.
+
+GitHub Pages does not ship a Content-Security-Policy today. If one is added
+later, allow `https://support.singletonsd.com` for `script-src` and
+`frame-src`, and both `https://support.singletonsd.com` and
+`wss://support.singletonsd.com` for `connect-src`.

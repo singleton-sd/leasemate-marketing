@@ -58,6 +58,8 @@ test("Pages workflow deploys main without deleting active previews", async () =>
   assert.doesNotMatch(workflow, /token:\s*\$\{\{\s*github\.token\s*\}\}/);
   assert.match(workflow, /PUBLIC_TURNSTILE_SITE_KEY/);
   assert.match(workflow, /PUBLIC_LEAD_INTAKE_ENABLED/);
+  assert.match(workflow, /PUBLIC_CHATWOOT_WEBSITE_TOKEN/);
+  assert.match(workflow, /PUBLIC_CHATWOOT_BASE_URL/);
   assert.match(workflow, /Require Turnstile site key when lead intake is on/);
   assert.doesNotMatch(workflow, /PUBLIC_POSTKIT_API_BASE_URL/);
   assert.doesNotMatch(workflow, /azure\/login/);
@@ -94,6 +96,9 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   assert.match(workflow, /header:\s*leasemate-preview/);
   assert.match(workflow, /pnpm test:visual/);
   assert.match(workflow, /pnpm test:seo/);
+  assert.match(workflow, /pnpm test:chatwoot/);
+  assert.match(workflow, /PUBLIC_CHATWOOT_WEBSITE_TOKEN/);
+  assert.match(workflow, /PUBLIC_CHATWOOT_BASE_URL/);
   assert.match(
     workflow,
     /- name: SEO metadata checks with lead intake on\n {8}env:\n {10}PUBLIC_LEAD_INTAKE_ENABLED: "true"\n {8}run: pnpm build && pnpm test:seo/,

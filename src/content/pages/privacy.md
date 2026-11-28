@@ -66,6 +66,7 @@ If you send a deletion or other privacy request to us directly, we will log it a
 
 - Information you submit through forms on our website (for example, joining a waitlist or contacting us).
 - Information collected by Cloudflare Turnstile to check that a form is being submitted by a person and not a bot.
+- If you use the chat on this website, messages you send (and your name and email if you provide them) are handled on Singleton SD's self-hosted support system.
 - [PLACEHOLDER: analytics or cookies used on the marketing site, if any]
 
 If you join our waitlist or opt in, we may email you about LeaseMate. Every marketing email has an unsubscribe link; we action unsubscribe requests within 5 working days. We never use lead or tenant information for marketing.

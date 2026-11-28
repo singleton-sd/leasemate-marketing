@@ -130,6 +130,10 @@ await context.addInitScript(() => {
     remove() {},
   };
 });
+await context.route("https://support.singletonsd.com/**", (route) =>
+  route.abort(),
+);
+await context.route(/\/packs\/js\/sdk\.js(?:\?|$)/, (route) => route.abort());
 const page = await context.newPage();
 
 try {

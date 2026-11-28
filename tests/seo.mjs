@@ -251,6 +251,24 @@ testMetadata("contact and waitlist follow the lead-intake flag", () => {
   assert.doesNotMatch(waitlistHtml, /data-waitlist-form=/);
 });
 
+testMetadata("chatwoot widget follows PUBLIC_CHATWOOT_* build env", () => {
+  const envToken = (process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN ?? "").trim();
+  const envBase = (process.env.PUBLIC_CHATWOOT_BASE_URL ?? "").trim();
+  const chatwootOn = Boolean(envToken && envBase);
+  const hasLoader = /data-chatwoot-loader/.test(indexHtml);
+
+  if (chatwootOn) {
+    assert.match(indexHtml, /data-chatwoot-loader/);
+    assert.match(indexHtml, /data-chatwoot-website-token=/);
+    assert.match(indexHtml, new RegExp(escapeRegExp(envToken)));
+    assert.doesNotMatch(indexHtml, /[?&](email|name)=/i);
+    return;
+  }
+
+  assert.equal(hasLoader, false);
+  assert.doesNotMatch(indexHtml, /data-chatwoot-website-token=/);
+});
+
 testMetadata("built pages have no contact email or mailto links", () => {
   const mailbox = /[A-Za-z0-9._%+-]+@leasemate\.singletonsd\.com/;
   assert.doesNotMatch(indexHtml, /mailto:/i);

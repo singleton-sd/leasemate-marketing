@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import "@fontsource-variable/plus-jakarta-sans";
+import ChatwootWidget from "../components/ChatwootWidget.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import { withBase } from "../lib/nav";
@@ -132,5 +133,6 @@ const jsonLd = {
     <SiteHeader currentPath={currentPath} />
     <slot />
     <SiteFooter />
+    <ChatwootWidget />
   </body>
 </html>

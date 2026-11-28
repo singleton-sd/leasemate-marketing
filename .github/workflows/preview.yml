@@ -83,6 +83,8 @@ jobs:
         run: pnpm test:seo
       - name: Lead form Playwright checks
         run: pnpm test:lead-forms
+      - name: Chatwoot widget Playwright checks
+        run: pnpm test:chatwoot
       - name: Capture visual screenshots
         run: pnpm test:visual
         env:
@@ -101,6 +103,8 @@ jobs:
         run: pnpm build
         env:
           PREVIEW_BASE_PATH: /pr-preview/pr-${{ github.event.number }}/
+          PUBLIC_CHATWOOT_WEBSITE_TOKEN: ${{ vars.PUBLIC_CHATWOOT_WEBSITE_TOKEN }}
+          PUBLIC_CHATWOOT_BASE_URL: ${{ vars.PUBLIC_CHATWOOT_BASE_URL }}
       - name: Ensure .nojekyll for GitHub Pages
         run: touch dist/.nojekyll
       - name: Host visual report under preview

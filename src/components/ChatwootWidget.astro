@@ -1,0 +1,27 @@
+---
+import { CHATWOOT_LOAD_TIMEOUT_MS, getChatwootConfig } from "../lib/chatwoot";
+
+const chatwoot = getChatwootConfig(
+  import.meta.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN,
+  import.meta.env.PUBLIC_CHATWOOT_BASE_URL,
+);
+---
+
+{
+  chatwoot ? (
+    <div
+      hidden
+      data-chatwoot-loader
+      data-chatwoot-website-token={chatwoot.websiteToken}
+      data-chatwoot-base-url={chatwoot.baseUrl}
+      data-chatwoot-timeout-ms={String(CHATWOOT_LOAD_TIMEOUT_MS)}
+    />
+  ) : null
+}
+
+<script>
+  if (document.querySelector("[data-chatwoot-loader]")) {
+    const chatwoot = await import("../lib/chatwoot");
+    chatwoot.bootChatwootFromDom();
+  }
+</script>
