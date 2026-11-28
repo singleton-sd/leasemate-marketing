@@ -130,6 +130,14 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
   assert.match(
     workflow,
+    /- name: SEO metadata checks\n {8}run: pnpm test:seo\n/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /name: SEO metadata checks\n {8}env:\n {10}PUBLIC_LEAD_INTAKE_ENABLED: "false"/,
+  );
+  assert.match(
+    workflow,
     /- name: SEO metadata checks with lead intake on\n {8}env:\n {10}PUBLIC_LEAD_INTAKE_ENABLED: "true"\n {8}run: pnpm build && pnpm test:seo/,
   );
   assert.match(workflow, /Accessibility checks with lead intake on/);

@@ -100,9 +100,9 @@ jobs:
         run: pnpm playwright:install
       - name: Accessibility checks
         run: pnpm test:a11y
+      # Inspect the App Config-baked dist. Do not override PUBLIC_* here —
+      # a step env beats GITHUB_ENV and would disagree with that dist.
       - name: SEO metadata checks
-        env:
-          PUBLIC_LEAD_INTAKE_ENABLED: "false"
         run: pnpm test:seo
       - name: Lead form Playwright checks
         run: pnpm test:lead-forms
