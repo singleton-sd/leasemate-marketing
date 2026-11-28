@@ -5,13 +5,29 @@
  * PUBLIC_* keys go to GITHUB_ENV. Every read is logged to the job summary
  * and stdout (allowed because these are non-secret PUBLIC_* values).
  *
- * Fails if any item is a Key Vault reference or its key is not PUBLIC_*.
+ * Fails if any item is a Key Vault reference or its key is not
+ * `PUBLIC_[A-Za-z0-9_]+`.
  */
+import { randomBytes } from "node:crypto";
 import { appendFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
 const KEY_VAULT_CONTENT_TYPE =
   "application/vnd.microsoft.appconfig.keyvaultref+json";
+const PUBLIC_ENV_KEY = /^PUBLIC_[A-Za-z0-9_]+$/;
+const GITHUB_ENV_DELIMITER_ATTEMPTS = 8;
+
+export function assertPublicEnvKey(key) {
+  if (!PUBLIC_ENV_KEY.test(key)) {
+    throw new Error(
+      `Refusing App Configuration key ${JSON.stringify(key)} because it is not PUBLIC_*.`,
+    );
+  }
+}
+
+export function createGithubEnvDelimiter() {
+  return `APPCONFIG_${randomBytes(16).toString("hex")}`;
+}
 
 export function contentTypeOf(item) {
   return String(item?.contentType ?? item?.content_type ?? "");
@@ -51,11 +67,7 @@ export function applyAppConfigPublicKv(items) {
         `Refusing Key Vault reference for ${key || "(missing key)"} (content type ${KEY_VAULT_CONTENT_TYPE}).`,
       );
     }
-    if (!key.startsWith("PUBLIC_")) {
-      throw new Error(
-        `Refusing App Configuration key ${JSON.stringify(key)} because it is not PUBLIC_*.`,
-      );
-    }
+    assertPublicEnvKey(key);
     audit.push({
       key,
       label: label || "(unlabeled)",
@@ -79,8 +91,22 @@ export function applyAppConfigPublicKv(items) {
   return { applied, audit };
 }
 
-export function githubEnvBlock(key, value) {
-  return `${key}<<APPCONFIG_EOF\n${value}\nAPPCONFIG_EOF\n`;
+export function githubEnvBlock(
+  key,
+  value,
+  createDelimiter = createGithubEnvDelimiter,
+) {
+  assertPublicEnvKey(key);
+  const text = String(value);
+  for (let attempt = 0; attempt < GITHUB_ENV_DELIMITER_ATTEMPTS; attempt += 1) {
+    const delimiter = createDelimiter();
+    if (!text.includes(delimiter)) {
+      return `${key}<<${delimiter}\n${text}\n${delimiter}\n`;
+    }
+  }
+  throw new Error(
+    `Unable to choose a GITHUB_ENV delimiter that is absent from ${key}.`,
+  );
 }
 
 export function auditSummaryMarkdown(audit) {

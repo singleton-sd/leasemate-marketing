@@ -69,6 +69,7 @@ jobs:
             --key 'PUBLIC_*' \
             --label '\0,leasemate-marketing' \
             --resolve-keyvault false \
+            --all \
             --output json \
             | node scripts/apply-appconfig-public-kv.mjs
       - name: Check out PR base for visual baseline

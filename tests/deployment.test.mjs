@@ -75,6 +75,7 @@ test("Pages workflow deploys main without deleting active previews", async () =>
   assert.doesNotMatch(workflow, /--name ssd-global-appcs-build-prod-ae/);
   assert.match(workflow, /az appconfig kv list/);
   assert.match(workflow, /--resolve-keyvault false/);
+  assert.match(workflow, /--all/);
   assert.match(workflow, /14ymjnwcw8c/);
   assert.match(workflow, /apply-appconfig-public-kv\.mjs/);
   assert.match(workflow, /Require Turnstile site key when lead intake is on/);
@@ -126,6 +127,7 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   );
   assert.doesNotMatch(workflow, /--name ssd-global-appcs-build-prod-ae/);
   assert.match(workflow, /az appconfig kv list/);
+  assert.match(workflow, /--all/);
   assert.match(workflow, /14ymjnwcw8c/);
   assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
   assert.match(
