@@ -73,12 +73,13 @@ App Configuration store `ssd-global-appcs-build-prod-ae` over GitHub OIDC
 label overrides them. GitHub repository variables are not the source of
 truth for these keys.
 
-| Key                             | Purpose                                                                                      |
-| ------------------------------- | -------------------------------------------------------------------------------------------- |
-| `PUBLIC_LEAD_INTAKE_ENABLED`    | Build-time contact/waitlist POST. Off until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh) |
-| `PUBLIC_TURNSTILE_SITE_KEY`     | Cloudflare Turnstile site key baked into static JS when lead intake is on                    |
-| `PUBLIC_CHATWOOT_WEBSITE_TOKEN` | Public Chatwoot website-inbox token for inbox "LeaseMate Marketing Site"                     |
-| `PUBLIC_CHATWOOT_BASE_URL`      | Chatwoot origin. Production value: `https://support.singletonsd.com`                         |
+| Key                             | Purpose                                                                                                                                      |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_LEAD_INTAKE_ENABLED`    | Build-time contact/waitlist POST. Off until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh)                                                 |
+| `PUBLIC_TURNSTILE_SITE_KEY`     | Cloudflare Turnstile site key baked into static JS when lead intake is on                                                                    |
+| `PUBLIC_CHATWOOT_WEBSITE_TOKEN` | Public Chatwoot website-inbox token for inbox "LeaseMate Marketing Site"                                                                     |
+| `PUBLIC_CHATWOOT_BASE_URL`      | Chatwoot origin. Production value: `https://support.singletonsd.com`                                                                         |
+| `PUBLIC_UMAMI_WEBSITE_ID`       | Public Umami website id for site "LeaseMate marketing". Production value: `728cb391-3289-40bc-b3f0-6230ecc412b5`. Tracker is off when unset. |
 
 Bots change values through the Azure MCP connector (or the portal). Trigger a
 rebuild with **workflow_dispatch** on `pages.yml` after a value change. Never
@@ -95,4 +96,5 @@ loads. Bubble colour is configured on the Chatwoot inbox.
 GitHub Pages does not ship a Content-Security-Policy today. If one is added
 later, allow `https://support.singletonsd.com` for `script-src` and
 `frame-src`, and both `https://support.singletonsd.com` and
-`wss://support.singletonsd.com` for `connect-src`.
+`wss://support.singletonsd.com` for `connect-src`. Also allow
+`https://analytics.singletonsd.com` for `script-src` and `connect-src`.

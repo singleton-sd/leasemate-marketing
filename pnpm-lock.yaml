@@ -17,6 +17,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.9.1
         version: 5.9.2(ajv@8.20.0)(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
+      '@singleton-sd/analytics-kit':
+        specifier: npmjs:0.1.0
+        version: npmjs:0.1.0
       '@singleton-sd/tokens':
         specifier: 1.8.0
         version: 1.8.0
@@ -941,6 +944,10 @@ packages:
 
   '@shikijs/vscode-textmate@10.1.0':
     resolution: {integrity: sha512-cVBuhDQjBZaNMTwBquYfPydrUP+E3hE6oYGasx8h6ZrODIM7/r+gxLDXdd66oszbrggZHEntdE6j+5gYIVyMWQ==}
+
+  '@singleton-sd/analytics-kit@npmjs:0.1.0':
+    resolution: {integrity: sha512-n2KwqxhA2Vd9W5FfDptHhXgm4puzQZhNoluvh0lZkjGvm1mmSW1hsBXnOozZdbPYJJpOPXKjZobzN5KRn12RNg==}
+    engines: {node: '>=22.12.0'}
 
   '@singleton-sd/tokens@1.8.0':
     resolution: {integrity: sha1-6cArgDnJzsJPZyDdjtWDfS1FLc4=, tarball: https://gitlab.com/api/v4/projects/70589530/packages/npm/@singleton-sd/tokens/-/@singleton-sd/tokens-1.8.0.tgz}
@@ -3339,6 +3346,8 @@ snapshots:
       '@types/hast': 3.0.5
 
   '@shikijs/vscode-textmate@10.1.0': {}
+
+  '@singleton-sd/analytics-kit@npmjs:0.1.0': {}
 
   '@singleton-sd/tokens@1.8.0': {}
 

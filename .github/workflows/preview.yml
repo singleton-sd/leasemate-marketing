@@ -109,6 +109,8 @@ jobs:
         run: pnpm test:lead-forms
       - name: Chatwoot widget Playwright checks
         run: pnpm test:chatwoot
+      - name: Umami analytics Playwright checks
+        run: pnpm test:umami
       - name: Capture visual screenshots
         run: pnpm test:visual
         env:

@@ -1,0 +1,15 @@
+---
+/**
+ * Client-only Umami init. Empty PUBLIC_UMAMI_WEBSITE_ID is a no-op so local
+ * builds without App Configuration stay quiet.
+ */
+---
+
+<script>
+  import { initAnalytics } from "@singleton-sd/analytics-kit";
+
+  initAnalytics({
+    websiteId: import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ?? "",
+    domains: "leasemate.singletonsd.com",
+  });
+</script>

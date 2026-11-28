@@ -4,6 +4,7 @@ import "@fontsource-variable/plus-jakarta-sans";
 import ChatwootWidget from "../components/ChatwootWidget.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import UmamiAnalytics from "../components/UmamiAnalytics.astro";
 import { withBase } from "../lib/nav";
 
 interface Props {
@@ -134,5 +135,6 @@ const jsonLd = {
     <slot />
     <SiteFooter />
     <ChatwootWidget />
+    <UmamiAnalytics />
   </body>
 </html>
