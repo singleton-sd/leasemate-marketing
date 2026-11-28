@@ -98,6 +98,17 @@ test("Umami website id is not hardcoded in source", async () => {
   }
 });
 
+test("Umami Playwright harness stays offline and ignores third-party console noise", async () => {
+  const harness = await readFile(new URL("tests/umami.mjs", root), "utf8");
+  assert.match(harness, /installOfflineNetwork/);
+  assert.match(harness, /page\.route\("\*\*\/\*"/);
+  assert.match(harness, /isLocalUrl/);
+  assert.match(harness, /route\.abort\(\)/);
+  assert.match(harness, /isTrackerError/);
+  assert.match(harness, /analytics\.singletonsd\.com/);
+  assert.match(harness, /SCRIPT_STUB/);
+});
+
 test("lead intake and attribution stay independent of analytics init", async () => {
   const leadIntake = await readFile(
     new URL("src/lib/lead-intake.ts", root),

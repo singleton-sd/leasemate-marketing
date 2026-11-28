@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 /**
  * Playwright: Umami tracker is injected on every built page when
- * PUBLIC_UMAMI_WEBSITE_ID is set, and is absent (with no errors) when empty.
- * analytics.singletonsd.com is stubbed so the harness stays offline.
+ * PUBLIC_UMAMI_WEBSITE_ID is set, and is absent (with no tracker errors) when
+ * empty. Every non-local request is stubbed or aborted so CI App Config
+ * (Turnstile, Chatwoot, lead intake) cannot reach the network.
  */
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
@@ -109,10 +110,45 @@ function createStaticServer(root) {
   });
 }
 
-function isExpected404Console(text) {
+function isLocalUrl(url, origin) {
+  return url === origin || url.startsWith(`${origin}/`);
+}
+
+function isUmamiScriptUrl(url) {
+  return url.split("?")[0] === UMAMI_SCRIPT_SRC;
+}
+
+function isTrackerError(text) {
+  const lower = text.toLowerCase();
   return (
-    text.includes("Failed to load resource") && text.includes("404 (Not Found)")
+    lower.includes("umami") ||
+    lower.includes("analytics-kit") ||
+    lower.includes("analytics.singletonsd.com") ||
+    lower.includes("data-website-id") ||
+    lower.includes("initanalytics")
   );
+}
+
+async function installOfflineNetwork(page, origin) {
+  await page.route("**/*", async (route) => {
+    const url = route.request().url();
+    if (isLocalUrl(url, origin)) {
+      await route.continue();
+      return;
+    }
+    if (
+      new URL(url).hostname === "analytics.singletonsd.com" &&
+      isUmamiScriptUrl(url)
+    ) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/javascript",
+        body: SCRIPT_STUB,
+      });
+      return;
+    }
+    await route.abort();
+  });
 }
 
 function listen(server, preferredPort = 0) {
@@ -186,31 +222,19 @@ function buildUmamiDist(label, websiteId) {
   return out;
 }
 
-async function stubAnalyticsHost(page) {
-  await page.route("https://analytics.singletonsd.com/**", async (route) => {
-    const url = route.request().url();
-    if (url.includes("/script.js")) {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/javascript",
-        body: SCRIPT_STUB,
-      });
-      return;
-    }
-    await route.abort();
-  });
-}
-
 async function assertTrackerPresent(page, origin, urlPath) {
   const pageErrors = [];
   const consoleErrors = [];
-  page.on("pageerror", (error) => pageErrors.push(String(error)));
+  page.on("pageerror", (error) => {
+    const text = String(error);
+    if (isTrackerError(text)) pageErrors.push(text);
+  });
   page.on("console", (msg) => {
     if (msg.type() !== "error") return;
     const text = msg.text();
-    if (!isExpected404Console(text)) consoleErrors.push(text);
+    if (isTrackerError(text)) consoleErrors.push(text);
   });
-  await stubAnalyticsHost(page);
+  await installOfflineNetwork(page, origin);
   await page.addInitScript(
     ({ key, value }) => {
       window.localStorage.setItem(key, value);
@@ -267,13 +291,16 @@ async function assertTrackerPresent(page, origin, urlPath) {
 async function assertTrackerAbsent(page, origin, urlPath) {
   const pageErrors = [];
   const consoleErrors = [];
-  page.on("pageerror", (error) => pageErrors.push(String(error)));
+  page.on("pageerror", (error) => {
+    const text = String(error);
+    if (isTrackerError(text)) pageErrors.push(text);
+  });
   page.on("console", (msg) => {
     if (msg.type() !== "error") return;
     const text = msg.text();
-    if (!isExpected404Console(text)) consoleErrors.push(text);
+    if (isTrackerError(text)) consoleErrors.push(text);
   });
-  await stubAnalyticsHost(page);
+  await installOfflineNetwork(page, origin);
   await page.goto(`${origin}${urlPath}`, { waitUntil: "domcontentloaded" });
   await page.locator("#main-content").waitFor();
   await page.waitForTimeout(500);
