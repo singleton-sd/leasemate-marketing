@@ -65,7 +65,17 @@ function resolveFsPath(root, urlPath) {
   };
 }
 
-function createStaticServer(root) {
+function stripUrlPrefix(urlPath, prefix) {
+  if (!prefix) return urlPath;
+  const normalized = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
+  if (urlPath === normalized || urlPath === `${normalized}/`) return "/";
+  if (urlPath.startsWith(`${normalized}/`)) {
+    return urlPath.slice(normalized.length);
+  }
+  return urlPath;
+}
+
+function createStaticServer(root, urlPrefix = "") {
   return http.createServer(async (req, res) => {
     try {
       if (!req.url) {
@@ -74,7 +84,8 @@ function createStaticServer(root) {
         return;
       }
 
-      const { pathname, fsPath } = resolveFsPath(root, req.url);
+      const requestUrl = stripUrlPrefix(req.url, urlPrefix);
+      const { pathname, fsPath } = resolveFsPath(root, requestUrl);
       const notFoundPath = path.join(root, "404.html");
 
       if (!existsSync(fsPath) || statSync(fsPath).isDirectory()) {
@@ -200,12 +211,13 @@ function parseSitemapRoutes(xml) {
   return routes;
 }
 
-function buildUmamiDist(label, websiteId) {
+function buildUmamiDist(label, websiteId, extraEnv = {}) {
   const out = path.join(rootDir, "test-results", `dist-umami-${label}`);
   mkdirSync(path.dirname(out), { recursive: true });
   const env = {
     ...process.env,
     PUBLIC_UMAMI_WEBSITE_ID: websiteId,
+    ...extraEnv,
   };
   const result = spawnSync(
     "pnpm",
@@ -331,6 +343,10 @@ if (!existsSync(defaultDistDir)) {
 
 const umamiOnDist = buildUmamiDist("on", TEST_UMAMI_WEBSITE_ID);
 const umamiOffDist = buildUmamiDist("off", "");
+const previewBasePath = "/pr-preview/pr-0/";
+const umamiPreviewDist = buildUmamiDist("preview", TEST_UMAMI_WEBSITE_ID, {
+  PREVIEW_BASE_PATH: previewBasePath,
+});
 
 const sitemapXml = await readFile(
   path.join(umamiOnDist, "sitemap.xml"),
@@ -338,25 +354,29 @@ const sitemapXml = await readFile(
 );
 const sitemapRoutes = parseSitemapRoutes(sitemapXml);
 const builtRoutes = collectHtmlRoutes(umamiOnDist);
+assert.ok(
+  builtRoutes.includes("/waitlist/"),
+  "waitlist must be in the built page list",
+);
+assert.ok(
+  builtRoutes.includes("/privacy/"),
+  "privacy (waitlist privacy policy) must be in the built page list",
+);
 const requiredRoutes = ["/waitlist/", "/privacy/", "/waitlist-privacy/"];
 const onRoutes = [
   ...new Set([...sitemapRoutes, ...builtRoutes, ...requiredRoutes]),
 ];
-assert.ok(
-  onRoutes.includes("/waitlist/"),
-  "waitlist must be in the built page list",
-);
-assert.ok(
-  onRoutes.includes("/privacy/"),
-  "privacy (waitlist privacy policy) must be in the built page list",
-);
+const previewRoutes = ["/", "/waitlist/", "/privacy/", "/waitlist-privacy/"];
 
 const onServer = createStaticServer(umamiOnDist);
 const offServer = createStaticServer(umamiOffDist);
+const previewServer = createStaticServer(umamiPreviewDist, previewBasePath);
 const onPort = await listen(onServer);
 const offPort = await listen(offServer);
+const previewPort = await listen(previewServer);
 const onOrigin = `http://127.0.0.1:${onPort}`;
 const offOrigin = `http://127.0.0.1:${offPort}`;
+const previewOrigin = `http://127.0.0.1:${previewPort}`;
 
 const browser = await chromium.launch();
 
@@ -381,9 +401,24 @@ try {
     await context.close();
   }
 
+  {
+    const context = await browser.newContext();
+    for (const urlPath of previewRoutes) {
+      const page = await context.newPage();
+      await assertTrackerAbsent(
+        page,
+        previewOrigin,
+        `${previewBasePath.replace(/\/$/, "")}${urlPath === "/" ? "/" : urlPath}`,
+      );
+      await page.close();
+    }
+    await context.close();
+  }
+
   console.log(`umami: ok (${onRoutes.length} routes)`);
 } finally {
   await browser.close();
   await new Promise((resolve) => onServer.close(resolve));
   await new Promise((resolve) => offServer.close(resolve));
+  await new Promise((resolve) => previewServer.close(resolve));
 }

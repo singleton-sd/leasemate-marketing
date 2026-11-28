@@ -51,6 +51,7 @@ test("site-wide Umami init uses analytics-kit and App Config website id", async 
   assert.match(widget, /from ["']@singleton-sd\/analytics-kit["']/);
   assert.match(widget, /initAnalytics\(/);
   assert.match(widget, /PUBLIC_UMAMI_WEBSITE_ID/);
+  assert.match(widget, /BASE_URL/);
   assert.match(
     widget,
     new RegExp(`domains:\\s*["']${UMAMI_DOMAINS.replaceAll(".", "\\.")}["']`),
@@ -107,6 +108,9 @@ test("Umami Playwright harness stays offline and ignores third-party console noi
   assert.match(harness, /isTrackerError/);
   assert.match(harness, /analytics\.singletonsd\.com/);
   assert.match(harness, /SCRIPT_STUB/);
+  assert.match(harness, /PREVIEW_BASE_PATH/);
+  assert.match(harness, /builtRoutes\.includes\("\/waitlist\/"\)/);
+  assert.match(harness, /builtRoutes\.includes\("\/privacy\/"\)/);
 });
 
 test("lead intake and attribution stay independent of analytics init", async () => {
