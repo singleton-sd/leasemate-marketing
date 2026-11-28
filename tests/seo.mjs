@@ -7,6 +7,9 @@ import { getNamedMetaContent } from "./seo-helpers.mjs";
 
 const repoRoot = new URL("..", import.meta.url);
 
+const { getChatwootConfig } = await import(
+  new URL("src/lib/chatwoot.ts", repoRoot).href
+);
 const { isLeadIntakeEnabled } = await import(
   new URL("src/lib/lead-intake-flag.ts", repoRoot).href
 );
@@ -249,6 +252,25 @@ testMetadata("contact and waitlist follow the lead-intake flag", () => {
   assert.match(waitlistHtml, /Waitlist opening soon/i);
   assert.match(waitlistHtml, /data-waitlist-opening-soon/);
   assert.doesNotMatch(waitlistHtml, /data-waitlist-form=/);
+});
+
+testMetadata("chatwoot widget follows PUBLIC_CHATWOOT_* build env", () => {
+  const chatwoot = getChatwootConfig(
+    process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN,
+    process.env.PUBLIC_CHATWOOT_BASE_URL,
+  );
+  const hasLoader = /data-chatwoot-loader/.test(indexHtml);
+
+  if (chatwoot) {
+    assert.match(indexHtml, /data-chatwoot-loader/);
+    assert.match(indexHtml, /data-chatwoot-website-token=/);
+    assert.match(indexHtml, new RegExp(escapeRegExp(chatwoot.websiteToken)));
+    assert.doesNotMatch(indexHtml, /[?&](email|name)=/i);
+    return;
+  }
+
+  assert.equal(hasLoader, false);
+  assert.doesNotMatch(indexHtml, /data-chatwoot-website-token=/);
 });
 
 testMetadata("built pages have no contact email or mailto links", () => {

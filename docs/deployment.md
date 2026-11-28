@@ -65,11 +65,34 @@ HTTPS** only after the certificate is available.
 Do not change DNS from this repository. Singleton Server adds a Route 53
 CNAME to `singleton-sd.github.io` only after Pato OKs.
 
-## Lead intake / Turnstile
+## Build-time PUBLIC_* settings (Azure App Configuration)
 
-| Variable                     | Purpose                                                                                |
-| ---------------------------- | -------------------------------------------------------------------------------------- |
-| `PUBLIC_LEAD_INTAKE_ENABLED` | Build-time flag. Off by default until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh) |
-| `PUBLIC_TURNSTILE_SITE_KEY`  | Cloudflare Turnstile site key baked into static JS when the flag is on                 |
+Preview and production builds read non-secret `PUBLIC_*` keys from the Azure
+App Configuration store `ssd-global-appcs-build-prod-ae` over GitHub OIDC
+(ADR-010). Unlabeled keys are the shared default; the `leasemate-marketing`
+label overrides them. GitHub repository variables are not the source of
+truth for these keys.
 
-Never commit the Turnstile secret; job-kit verifies tokens.
+| Key                             | Purpose                                                                                      |
+| ------------------------------- | -------------------------------------------------------------------------------------------- |
+| `PUBLIC_LEAD_INTAKE_ENABLED`    | Build-time contact/waitlist POST. Off until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh) |
+| `PUBLIC_TURNSTILE_SITE_KEY`     | Cloudflare Turnstile site key baked into static JS when lead intake is on                    |
+| `PUBLIC_CHATWOOT_WEBSITE_TOKEN` | Public Chatwoot website-inbox token for inbox "LeaseMate Marketing Site"                     |
+| `PUBLIC_CHATWOOT_BASE_URL`      | Chatwoot origin. Production value: `https://support.singletonsd.com`                         |
+
+Bots change values through the Azure MCP connector (or the portal). Trigger a
+rebuild with **workflow_dispatch** on `pages.yml` after a value change. Never
+commit the Turnstile secret; job-kit verifies tokens.
+
+The inline Azure login + `az appconfig kv list --endpoint` step is a stopgap.
+[SSD-1235](https://app.clickup.com/t/14ymjnwcw8c) replaces it with the shared
+`singleton-sd/.github` workflow.
+
+The Chatwoot widget stays off when either Chatwoot key is unset. The loader
+sets `window.chatwootSettings = { darkMode: "dark" }` before the SDK script
+loads. Bubble colour is configured on the Chatwoot inbox.
+
+GitHub Pages does not ship a Content-Security-Policy today. If one is added
+later, allow `https://support.singletonsd.com` for `script-src` and
+`frame-src`, and both `https://support.singletonsd.com` and
+`wss://support.singletonsd.com` for `connect-src`.

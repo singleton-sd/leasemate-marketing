@@ -19,6 +19,7 @@
     "test:seo": "node --experimental-strip-types tests/seo.mjs",
     "test:a11y": "node tests/a11y.mjs",
     "test:lead-forms": "node tests/lead-forms.mjs",
+    "test:chatwoot": "node --experimental-strip-types tests/chatwoot.mjs",
     "test:visual": "node tests/visual.mjs",
     "test:visual:gate": "node tests/visual-gate.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm test:seo && pnpm test:a11y",

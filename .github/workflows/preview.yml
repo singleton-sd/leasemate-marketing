@@ -22,10 +22,9 @@ jobs:
       contains(fromJSON('["opened","reopened","synchronize"]'), github.event.action)
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       actions: write
-    env:
-      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -48,6 +47,31 @@ jobs:
         run: pnpm lint
       - name: Run tests
         run: pnpm test
+      # SSD-1235 (https://app.clickup.com/t/14ymjnwcw8c) replaces this Azure
+      # login and App Configuration read with the shared singleton-sd/.github
+      # workflow.
+      - name: Sign in to Azure with OIDC
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
+        with:
+          client-id: 4764ad98-0805-485d-8167-123cb7e90f63
+          tenant-id: 9a0e57d7-e58e-4e8b-814d-037cd7d9015c
+          subscription-id: 01c0bb8b-3770-4765-979a-cb13ae7e3dd2
+      - name: Read PUBLIC_* from Azure App Configuration
+        run: |
+          set -euo pipefail
+          az config set extension.use_dynamic_install=yes_without_prompt
+          # --endpoint uses the data plane. --name does an ARM lookup that
+          # this identity cannot complete ("Failed to find the App
+          # Configuration store").
+          az appconfig kv list \
+            --endpoint 'https://ssd-global-appcs-build-prod-ae.azconfig.io' \
+            --auth-mode login \
+            --key 'PUBLIC_*' \
+            --label '\0,leasemate-marketing' \
+            --resolve-keyvault false \
+            --all \
+            --output json \
+            | node scripts/apply-appconfig-public-kv.mjs
       - name: Check out PR base for visual baseline
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -77,12 +101,14 @@ jobs:
         run: pnpm playwright:install
       - name: Accessibility checks
         run: pnpm test:a11y
+      # Inspect the App Config-baked dist. Do not override PUBLIC_* here —
+      # a step env beats GITHUB_ENV and would disagree with that dist.
       - name: SEO metadata checks
-        env:
-          PUBLIC_LEAD_INTAKE_ENABLED: "false"
         run: pnpm test:seo
       - name: Lead form Playwright checks
         run: pnpm test:lead-forms
+      - name: Chatwoot widget Playwright checks
+        run: pnpm test:chatwoot
       - name: Capture visual screenshots
         run: pnpm test:visual
         env:

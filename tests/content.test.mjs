@@ -170,6 +170,10 @@ test("privacy and terms render draft legal content collections", async () => {
     /description: "How LeaseMate collects, uses, stores and protects personal information\."/,
   );
   assert.match(privacy, /\[PLACEHOLDER: ACN\]/);
+  assert.match(
+    privacy,
+    /chat on this website.*Singleton SD's self-hosted support system/s,
+  );
   assert.match(privacy, /> \*\*.*legal review.*\*\*/i);
   assert.match(terms, /^template: terms$/m);
   assert.match(terms, /^draft: true$/m);

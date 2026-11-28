@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 /**
  * Playwright: contact + waitlist POST /v1/leads (mocked).
- * Default dist (flag off) must show opening-soon. Flag-on dist is built here.
+ * Flag-off and flag-on dists are built here so CI can bake App Config into
+ * workspace dist/ without breaking the opening-soon path.
  */
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
@@ -13,7 +14,6 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
 const rootDir = fileURLToPath(new URL("..", import.meta.url));
-const defaultDistDir = path.join(rootDir, "dist");
 const port = Number(process.env.LEAD_FORMS_PORT ?? 0);
 const TURNSTILE_LOAD_ERROR =
   "Verification failed to load. Check your connection and try again.";
@@ -112,8 +112,12 @@ function listen(server, preferredPort = 0) {
   });
 }
 
-function ensureLeadFormsDist() {
-  const out = path.join(rootDir, "test-results", "dist-lead-forms-on");
+function ensureLeadFormsDist(enabled) {
+  const out = path.join(
+    rootDir,
+    "test-results",
+    enabled ? "dist-lead-forms-on" : "dist-lead-forms-off",
+  );
   mkdirSync(path.dirname(out), { recursive: true });
   const result = spawnSync(
     "pnpm",
@@ -122,7 +126,7 @@ function ensureLeadFormsDist() {
       cwd: rootDir,
       env: {
         ...process.env,
-        PUBLIC_LEAD_INTAKE_ENABLED: "true",
+        PUBLIC_LEAD_INTAKE_ENABLED: enabled ? "true" : "false",
         PUBLIC_TURNSTILE_SITE_KEY:
           process.env.PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA",
       },
@@ -130,18 +134,26 @@ function ensureLeadFormsDist() {
     },
   );
   if (result.status !== 0) {
-    throw new Error("Failed to build lead-forms-on dist.");
+    throw new Error(
+      enabled
+        ? "Failed to build lead-forms-on dist."
+        : "Failed to build lead-forms-off dist.",
+    );
   }
   return out;
 }
 
-const leadOnDist = ensureLeadFormsDist();
+const leadOffDist = ensureLeadFormsDist(false);
+const leadOnDist = ensureLeadFormsDist(true);
 const leadOnServer = createStaticServer(leadOnDist);
 const leadOnPort = await listen(leadOnServer, port);
 const origin = `http://127.0.0.1:${leadOnPort}`;
 
 const browser = await chromium.launch();
 const context = await browser.newContext();
+await context.route("https://support.singletonsd.com/**", (route) =>
+  route.abort(),
+);
 await context.addInitScript(() => {
   let lastOptions;
   window.turnstile = {
@@ -183,14 +195,8 @@ async function mockLeads(handler) {
 }
 
 try {
-  if (!existsSync(defaultDistDir)) {
-    throw new Error(
-      `Missing dist directory at ${defaultDistDir}. Run pnpm build first (flag off).`,
-    );
-  }
-
   {
-    const flagOffServer = createStaticServer(defaultDistDir);
+    const flagOffServer = createStaticServer(leadOffDist);
     const flagOffPort = await listen(flagOffServer);
     const flagOffOrigin = `http://127.0.0.1:${flagOffPort}`;
     const flagOffPage = await context.newPage();
@@ -410,6 +416,9 @@ try {
   assert.equal(waitlistSuccess[0].body.formType, "waitlist");
 
   const failContext = await browser.newContext();
+  await failContext.route("https://support.singletonsd.com/**", (route) =>
+    route.abort(),
+  );
   const failPage = await failContext.newPage();
   try {
     let allowTurnstileScript = false;
