@@ -12,6 +12,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
+const { getChatwootConfig } = await import(
+  new URL("../src/lib/chatwoot.ts", import.meta.url).href
+);
+
 const rootDir = fileURLToPath(new URL("..", import.meta.url));
 const defaultDistDir = path.join(rootDir, "dist");
 const TEST_TOKEN = "test-chatwoot-website-token";
@@ -129,8 +133,10 @@ function ensureChatwootDist() {
 
 function isChatwootEnvOn() {
   return Boolean(
-    (process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN ?? "").trim() &&
-    (process.env.PUBLIC_CHATWOOT_BASE_URL ?? "").trim(),
+    getChatwootConfig(
+      process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN,
+      process.env.PUBLIC_CHATWOOT_BASE_URL,
+    ),
   );
 }
 
@@ -193,6 +199,9 @@ try {
     assert.deepEqual(ran, {
       websiteToken: TEST_TOKEN,
       baseUrl: TEST_BASE_URL,
+    });
+    assert.deepEqual(await page.evaluate(() => window.chatwootSettings), {
+      darkMode: "dark",
     });
     await page.locator("#main-content").waitFor();
     assert.equal(pageErrors.length, 0, pageErrors.join("\n"));

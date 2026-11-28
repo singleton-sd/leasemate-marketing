@@ -38,4 +38,5 @@ Contact and waitlist POST to `https://api.singletonsd.com/v1/leads` is gated by
 `PUBLIC_LEAD_INTAKE_ENABLED` (off by default until [SSD-718](https://app.clickup.com/t/14ymjnwa4hh)).
 
 The Chatwoot live-chat widget is gated by `PUBLIC_CHATWOOT_WEBSITE_TOKEN` and
-`PUBLIC_CHATWOOT_BASE_URL` (off when either is unset).
+`PUBLIC_CHATWOOT_BASE_URL` (off when either is unset). CI bakes `PUBLIC_*`
+values from Azure App Configuration, not GitHub repository variables.

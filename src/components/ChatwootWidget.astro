@@ -21,6 +21,7 @@ const chatwoot = getChatwootConfig(
 
 <script>
   if (document.querySelector("[data-chatwoot-loader]")) {
+    window.chatwootSettings = { darkMode: "dark" };
     const chatwoot = await import("../lib/chatwoot");
     chatwoot.bootChatwootFromDom();
   }

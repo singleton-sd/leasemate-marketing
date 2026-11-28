@@ -56,13 +56,25 @@ test("Pages workflow deploys main without deleting active previews", async () =>
   assert.doesNotMatch(workflow, /secrets\.(?!RELEASE_APP_PRIVATE_KEY)/);
   assert.doesNotMatch(workflow, /secrets\.GITHUB_TOKEN/);
   assert.doesNotMatch(workflow, /token:\s*\$\{\{\s*github\.token\s*\}\}/);
-  assert.match(workflow, /PUBLIC_TURNSTILE_SITE_KEY/);
-  assert.match(workflow, /PUBLIC_LEAD_INTAKE_ENABLED/);
-  assert.match(workflow, /PUBLIC_CHATWOOT_WEBSITE_TOKEN/);
-  assert.match(workflow, /PUBLIC_CHATWOOT_BASE_URL/);
+  assert.match(workflow, /id-token:\s*write/);
+  assert.match(
+    workflow,
+    /azure\/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2\.3\.1/,
+  );
+  assert.match(workflow, /client-id:\s*4764ad98-0805-485d-8167-123cb7e90f63/);
+  assert.match(workflow, /tenant-id:\s*9a0e57d7-e58e-4e8b-814d-037cd7d9015c/);
+  assert.match(
+    workflow,
+    /subscription-id:\s*01c0bb8b-3770-4765-979a-cb13ae7e3dd2/,
+  );
+  assert.match(workflow, /ssd-global-appcs-build-prod-ae/);
+  assert.match(workflow, /az appconfig kv list/);
+  assert.match(workflow, /--resolve-keyvault false/);
+  assert.match(workflow, /14ymjnwcw8c/);
+  assert.match(workflow, /apply-appconfig-public-kv\.mjs/);
   assert.match(workflow, /Require Turnstile site key when lead intake is on/);
+  assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
   assert.doesNotMatch(workflow, /PUBLIC_POSTKIT_API_BASE_URL/);
-  assert.doesNotMatch(workflow, /azure\/login/);
 });
 
 test("PR workflow publishes subpath previews and updates the PR body", async () => {
@@ -97,8 +109,15 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   assert.match(workflow, /pnpm test:visual/);
   assert.match(workflow, /pnpm test:seo/);
   assert.match(workflow, /pnpm test:chatwoot/);
-  assert.match(workflow, /PUBLIC_CHATWOOT_WEBSITE_TOKEN/);
-  assert.match(workflow, /PUBLIC_CHATWOOT_BASE_URL/);
+  assert.match(workflow, /id-token:\s*write/);
+  assert.match(
+    workflow,
+    /azure\/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2\.3\.1/,
+  );
+  assert.match(workflow, /ssd-global-appcs-build-prod-ae/);
+  assert.match(workflow, /az appconfig kv list/);
+  assert.match(workflow, /14ymjnwcw8c/);
+  assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
   assert.match(
     workflow,
     /- name: SEO metadata checks with lead intake on\n {8}env:\n {10}PUBLIC_LEAD_INTAKE_ENABLED: "true"\n {8}run: pnpm build && pnpm test:seo/,

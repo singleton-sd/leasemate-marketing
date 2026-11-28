@@ -63,6 +63,21 @@ test("site-wide loader uses the async Chatwoot snippet with a timeout", async ()
   assert.match(widget, /data-chatwoot-loader/);
   assert.match(widget, /bootChatwootFromDom/);
   assert.match(widget, /await import\("\.\.\/lib\/chatwoot"\)/);
+  assert.match(widget, /window\.chatwootSettings = \{ darkMode: "dark" \}/);
+  assert.match(loader, /applyChatwootSettings/);
+  assert.match(loader, /darkMode: "dark"/);
+  assert.doesNotMatch(widget, /position:|type:/);
+  assert.doesNotMatch(loader, /position:|type:|#ffb300/i);
+  assert.ok(
+    widget.indexOf('window.chatwootSettings = { darkMode: "dark" }') <
+      widget.indexOf('await import("../lib/chatwoot")'),
+    "chatwootSettings must be set before the SDK module loads",
+  );
+  assert.ok(
+    loader.indexOf("applyChatwootSettings()") <
+      loader.indexOf("d.createElement(t)"),
+    "chatwootSettings must be set before the SDK script is created",
+  );
   assert.match(loader, /g\.async = true/);
   assert.match(loader, /chatwootSDK\?\.run/);
   assert.match(loader, /websiteToken,/);

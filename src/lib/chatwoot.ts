@@ -12,10 +12,20 @@ export type ChatwootSdk = {
   run: (options: { websiteToken: string; baseUrl: string }) => void;
 };
 
+export type ChatwootSettings = {
+  darkMode: "dark";
+};
+
 declare global {
   interface Window {
     chatwootSDK?: ChatwootSdk;
+    chatwootSettings?: ChatwootSettings;
   }
+}
+
+export function applyChatwootSettings(): void {
+  if (typeof window === "undefined") return;
+  window.chatwootSettings = { darkMode: "dark" };
 }
 
 export function getChatwootConfig(
@@ -69,6 +79,7 @@ export function loadChatwootSnippet(
 ): void {
   if (typeof document === "undefined" && !doc) return;
   const d = doc ?? document;
+  applyChatwootSettings();
   const t = "script";
   const BASE_URL = config.baseUrl;
   const websiteToken = config.websiteToken;

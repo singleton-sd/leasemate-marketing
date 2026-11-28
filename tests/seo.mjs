@@ -7,6 +7,9 @@ import { getNamedMetaContent } from "./seo-helpers.mjs";
 
 const repoRoot = new URL("..", import.meta.url);
 
+const { getChatwootConfig } = await import(
+  new URL("src/lib/chatwoot.ts", repoRoot).href
+);
 const { isLeadIntakeEnabled } = await import(
   new URL("src/lib/lead-intake-flag.ts", repoRoot).href
 );
@@ -252,15 +255,16 @@ testMetadata("contact and waitlist follow the lead-intake flag", () => {
 });
 
 testMetadata("chatwoot widget follows PUBLIC_CHATWOOT_* build env", () => {
-  const envToken = (process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN ?? "").trim();
-  const envBase = (process.env.PUBLIC_CHATWOOT_BASE_URL ?? "").trim();
-  const chatwootOn = Boolean(envToken && envBase);
+  const chatwoot = getChatwootConfig(
+    process.env.PUBLIC_CHATWOOT_WEBSITE_TOKEN,
+    process.env.PUBLIC_CHATWOOT_BASE_URL,
+  );
   const hasLoader = /data-chatwoot-loader/.test(indexHtml);
 
-  if (chatwootOn) {
+  if (chatwoot) {
     assert.match(indexHtml, /data-chatwoot-loader/);
     assert.match(indexHtml, /data-chatwoot-website-token=/);
-    assert.match(indexHtml, new RegExp(escapeRegExp(envToken)));
+    assert.match(indexHtml, new RegExp(escapeRegExp(chatwoot.websiteToken)));
     assert.doesNotMatch(indexHtml, /[?&](email|name)=/i);
     return;
   }

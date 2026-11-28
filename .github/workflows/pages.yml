@@ -1,7 +1,8 @@
-# Build is unauthenticated (contents: read, no secrets). Deploy checks out
-# for JamesIves (needs a git directory), downloads dist, then mints the
-# singleton-release App token as its last setup step and deploys with that
-# token only — never GITHUB_TOKEN.
+# Build reads PUBLIC_* from Azure App Configuration over GitHub OIDC
+# (id-token: write, no client secret). Deploy checks out for JamesIves
+# (needs a git directory), downloads dist, then mints the singleton-release
+# App token as its last setup step and deploys with that token only —
+# never GITHUB_TOKEN.
 name: Deploy production GitHub Pages
 
 on:
@@ -20,6 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       actions: write
     steps:
@@ -44,26 +46,39 @@ jobs:
         run: pnpm lint
       - name: Run tests
         run: pnpm test
+      # SSD-1235 (https://app.clickup.com/t/14ymjnwcw8c) replaces this Azure
+      # login and App Configuration read with the shared singleton-sd/.github
+      # workflow.
+      - name: Sign in to Azure with OIDC
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
+        with:
+          client-id: 4764ad98-0805-485d-8167-123cb7e90f63
+          tenant-id: 9a0e57d7-e58e-4e8b-814d-037cd7d9015c
+          subscription-id: 01c0bb8b-3770-4765-979a-cb13ae7e3dd2
+      - name: Read PUBLIC_* from Azure App Configuration
+        run: |
+          set -euo pipefail
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az appconfig kv list \
+            --name ssd-global-appcs-build-prod-ae \
+            --auth-mode login \
+            --key 'PUBLIC_*' \
+            --label '\0,leasemate-marketing' \
+            --resolve-keyvault false \
+            --output json \
+            | node scripts/apply-appconfig-public-kv.mjs
       - name: Require Turnstile site key when lead intake is on
-        env:
-          PUBLIC_LEAD_INTAKE_ENABLED: ${{ vars.PUBLIC_LEAD_INTAKE_ENABLED }}
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
         run: |
           case "${PUBLIC_LEAD_INTAKE_ENABLED:-}" in
             true|TRUE|1|yes|YES) enabled=1 ;;
             *) enabled=0 ;;
           esac
           if [ "$enabled" = 1 ] && [ -z "${PUBLIC_TURNSTILE_SITE_KEY:-}" ]; then
-            echo "::error::Set repository variable PUBLIC_TURNSTILE_SITE_KEY (public site key only) before enabling PUBLIC_LEAD_INTAKE_ENABLED."
+            echo "::error::Set PUBLIC_TURNSTILE_SITE_KEY in Azure App Configuration (public site key only) before enabling PUBLIC_LEAD_INTAKE_ENABLED."
             exit 1
           fi
       - name: Build production site
         run: pnpm build
-        env:
-          PUBLIC_LEAD_INTAKE_ENABLED: ${{ vars.PUBLIC_LEAD_INTAKE_ENABLED }}
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
-          PUBLIC_CHATWOOT_WEBSITE_TOKEN: ${{ vars.PUBLIC_CHATWOOT_WEBSITE_TOKEN }}
-          PUBLIC_CHATWOOT_BASE_URL: ${{ vars.PUBLIC_CHATWOOT_BASE_URL }}
       - name: Ensure .nojekyll for GitHub Pages
         run: touch dist/.nojekyll
       - name: Install Playwright browsers
