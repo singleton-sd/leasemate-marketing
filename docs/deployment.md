@@ -84,7 +84,7 @@ Bots change values through the Azure MCP connector (or the portal). Trigger a
 rebuild with **workflow_dispatch** on `pages.yml` after a value change. Never
 commit the Turnstile secret; job-kit verifies tokens.
 
-The inline Azure login + `az appconfig kv list` step is a stopgap.
+The inline Azure login + `az appconfig kv list --endpoint` step is a stopgap.
 [SSD-1235](https://app.clickup.com/t/14ymjnwcw8c) replaces it with the shared
 `singleton-sd/.github` workflow.
 

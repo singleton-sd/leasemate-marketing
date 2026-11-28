@@ -118,6 +118,11 @@ const isCli =
 
 if (isCli) {
   const raw = await readStdin();
+  if (!raw.trim()) {
+    throw new Error(
+      "App Configuration list was empty. az appconfig kv list produced no JSON.",
+    );
+  }
   let items;
   try {
     items = JSON.parse(raw);

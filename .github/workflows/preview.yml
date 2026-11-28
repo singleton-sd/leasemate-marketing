@@ -60,8 +60,11 @@ jobs:
         run: |
           set -euo pipefail
           az config set extension.use_dynamic_install=yes_without_prompt
+          # --endpoint uses the data plane. --name does an ARM lookup that
+          # this identity cannot complete ("Failed to find the App
+          # Configuration store").
           az appconfig kv list \
-            --name ssd-global-appcs-build-prod-ae \
+            --endpoint 'https://ssd-global-appcs-build-prod-ae.azconfig.io' \
             --auth-mode login \
             --key 'PUBLIC_*' \
             --label '\0,leasemate-marketing' \

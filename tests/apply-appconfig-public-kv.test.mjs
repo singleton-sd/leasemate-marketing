@@ -107,3 +107,12 @@ test("CLI writes GITHUB_ENV and the job summary audit trail", async () => {
   assert.match(summary, /inbox-token/);
   assert.match(result.stdout, /appconfig key=PUBLIC_CHATWOOT_WEBSITE_TOKEN/);
 });
+
+test("CLI fails when az produces no JSON", () => {
+  const result = spawnSync(process.execPath, [scriptPath], {
+    input: "",
+    encoding: "utf8",
+  });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /produced no JSON/);
+});

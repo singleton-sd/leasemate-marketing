@@ -68,6 +68,11 @@ test("Pages workflow deploys main without deleting active previews", async () =>
     /subscription-id:\s*01c0bb8b-3770-4765-979a-cb13ae7e3dd2/,
   );
   assert.match(workflow, /ssd-global-appcs-build-prod-ae/);
+  assert.match(
+    workflow,
+    /--endpoint 'https:\/\/ssd-global-appcs-build-prod-ae\.azconfig\.io'/,
+  );
+  assert.doesNotMatch(workflow, /--name ssd-global-appcs-build-prod-ae/);
   assert.match(workflow, /az appconfig kv list/);
   assert.match(workflow, /--resolve-keyvault false/);
   assert.match(workflow, /14ymjnwcw8c/);
@@ -115,6 +120,11 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
     /azure\/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2\.3\.1/,
   );
   assert.match(workflow, /ssd-global-appcs-build-prod-ae/);
+  assert.match(
+    workflow,
+    /--endpoint 'https:\/\/ssd-global-appcs-build-prod-ae\.azconfig\.io'/,
+  );
+  assert.doesNotMatch(workflow, /--name ssd-global-appcs-build-prod-ae/);
   assert.match(workflow, /az appconfig kv list/);
   assert.match(workflow, /14ymjnwcw8c/);
   assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
