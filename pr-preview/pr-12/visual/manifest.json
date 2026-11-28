@@ -1,6 +1,6 @@
 {
   "basePath": "/",
-  "headSha": "c05750dcf2697421d82253239cd684ef832ab874",
+  "headSha": "b9a0c4033f164a11f7de869088155f87268c1f64",
   "baseSha": "292da92a445c2b645ec19e42aed0719b78843870",
   "baseLabel": "local:/home/runner/work/leasemate-marketing/leasemate-marketing/visual-base/dist",
   "baseSiteUrl": null,
@@ -38,7 +38,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:33643/404",
+      "baseUrl": "http://127.0.0.1:40517/404",
       "status": "unchanged"
     },
     {
@@ -49,7 +49,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:33643/404",
+      "baseUrl": "http://127.0.0.1:40517/404",
       "status": "unchanged"
     },
     {
@@ -60,7 +60,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/404",
-      "baseUrl": "http://127.0.0.1:33643/404",
+      "baseUrl": "http://127.0.0.1:40517/404",
       "status": "unchanged"
     },
     {
@@ -71,7 +71,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:33643/contact",
+      "baseUrl": "http://127.0.0.1:40517/contact",
       "status": "unchanged"
     },
     {
@@ -82,7 +82,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:33643/contact",
+      "baseUrl": "http://127.0.0.1:40517/contact",
       "status": "unchanged"
     },
     {
@@ -93,7 +93,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/contact",
-      "baseUrl": "http://127.0.0.1:33643/contact",
+      "baseUrl": "http://127.0.0.1:40517/contact",
       "status": "unchanged"
     },
     {
@@ -104,7 +104,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:33643/features",
+      "baseUrl": "http://127.0.0.1:40517/features",
       "status": "unchanged"
     },
     {
@@ -115,7 +115,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:33643/features",
+      "baseUrl": "http://127.0.0.1:40517/features",
       "status": "unchanged"
     },
     {
@@ -126,7 +126,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/features",
-      "baseUrl": "http://127.0.0.1:33643/features",
+      "baseUrl": "http://127.0.0.1:40517/features",
       "status": "unchanged"
     },
     {
@@ -137,7 +137,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:33643/",
+      "baseUrl": "http://127.0.0.1:40517/",
       "status": "unchanged"
     },
     {
@@ -148,7 +148,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:33643/",
+      "baseUrl": "http://127.0.0.1:40517/",
       "status": "unchanged"
     },
     {
@@ -159,7 +159,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/",
-      "baseUrl": "http://127.0.0.1:33643/",
+      "baseUrl": "http://127.0.0.1:40517/",
       "status": "unchanged"
     },
     {
@@ -170,7 +170,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:33643/pricing",
+      "baseUrl": "http://127.0.0.1:40517/pricing",
       "status": "unchanged"
     },
     {
@@ -181,7 +181,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:33643/pricing",
+      "baseUrl": "http://127.0.0.1:40517/pricing",
       "status": "unchanged"
     },
     {
@@ -192,7 +192,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/pricing",
-      "baseUrl": "http://127.0.0.1:33643/pricing",
+      "baseUrl": "http://127.0.0.1:40517/pricing",
       "status": "unchanged"
     },
     {
@@ -203,7 +203,7 @@
       "diffFile": "diff/privacy-desktop.png",
       "mismatched": 852584,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:33643/privacy",
+      "baseUrl": "http://127.0.0.1:40517/privacy",
       "status": "changed"
     },
     {
@@ -214,7 +214,7 @@
       "diffFile": "diff/privacy-mobile.png",
       "mismatched": 759182,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:33643/privacy",
+      "baseUrl": "http://127.0.0.1:40517/privacy",
       "status": "changed"
     },
     {
@@ -225,7 +225,7 @@
       "diffFile": "diff/privacy-mobile-375.png",
       "mismatched": 779501,
       "prUrl": "/privacy",
-      "baseUrl": "http://127.0.0.1:33643/privacy",
+      "baseUrl": "http://127.0.0.1:40517/privacy",
       "status": "changed"
     },
     {
@@ -236,7 +236,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:33643/terms",
+      "baseUrl": "http://127.0.0.1:40517/terms",
       "status": "unchanged"
     },
     {
@@ -247,7 +247,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:33643/terms",
+      "baseUrl": "http://127.0.0.1:40517/terms",
       "status": "unchanged"
     },
     {
@@ -258,7 +258,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/terms",
-      "baseUrl": "http://127.0.0.1:33643/terms",
+      "baseUrl": "http://127.0.0.1:40517/terms",
       "status": "unchanged"
     },
     {
@@ -269,7 +269,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:33643/waitlist",
+      "baseUrl": "http://127.0.0.1:40517/waitlist",
       "status": "unchanged"
     },
     {
@@ -280,7 +280,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:33643/waitlist",
+      "baseUrl": "http://127.0.0.1:40517/waitlist",
       "status": "unchanged"
     },
     {
@@ -291,7 +291,7 @@
       "diffFile": null,
       "mismatched": 0,
       "prUrl": "/waitlist",
-      "baseUrl": "http://127.0.0.1:33643/waitlist",
+      "baseUrl": "http://127.0.0.1:40517/waitlist",
       "status": "unchanged"
     },
     {
