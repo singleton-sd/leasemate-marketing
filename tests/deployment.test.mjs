@@ -79,6 +79,7 @@ test("Pages workflow deploys main without deleting active previews", async () =>
   assert.match(workflow, /14ymjnwcw8c/);
   assert.match(workflow, /apply-appconfig-public-kv\.mjs/);
   assert.match(workflow, /Require Turnstile site key when lead intake is on/);
+  assert.match(workflow, /pnpm test:umami/);
   assert.doesNotMatch(workflow, /vars\.PUBLIC_/);
   assert.doesNotMatch(workflow, /PUBLIC_POSTKIT_API_BASE_URL/);
 });
@@ -115,6 +116,7 @@ test("PR workflow publishes subpath previews and updates the PR body", async () 
   assert.match(workflow, /pnpm test:visual/);
   assert.match(workflow, /pnpm test:seo/);
   assert.match(workflow, /pnpm test:chatwoot/);
+  assert.match(workflow, /pnpm test:umami/);
   assert.match(workflow, /id-token:\s*write/);
   assert.match(
     workflow,

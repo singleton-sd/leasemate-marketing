@@ -1,0 +1,20 @@
+---
+/**
+ * Client-only Umami init. Empty PUBLIC_UMAMI_WEBSITE_ID is a no-op so local
+ * builds without App Configuration stay quiet. Preview builds share the
+ * production hostname, so a BASE_URL other than `/` forces an empty id.
+ */
+---
+
+<script>
+  import { initAnalytics } from "@singleton-sd/analytics-kit";
+
+  const productionHost = (import.meta.env.BASE_URL || "/") === "/";
+
+  initAnalytics({
+    websiteId: productionHost
+      ? (import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ?? "")
+      : "",
+    domains: "leasemate.singletonsd.com",
+  });
+</script>
